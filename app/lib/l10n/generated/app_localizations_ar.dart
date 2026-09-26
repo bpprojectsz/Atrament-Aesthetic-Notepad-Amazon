@@ -429,5 +429,5 @@ class AppLocalizationsAr extends AppLocalizations {
   String get openSourceLicensesRow => 'تراخيص المصادر المفتوحة';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'غير متاح بعد';
 }

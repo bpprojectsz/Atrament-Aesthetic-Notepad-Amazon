@@ -149,5 +149,6 @@
   "termsOfServiceRow": "सेवा की शर्तें",
   "supportRow": "सहायता",
   "openLinkFailedMessage": "लिंक नहीं खोल सका। कृपया पुनः प्रयास करें।",
-  "openSourceLicensesRow": "ओपन-सोर्स लाइसेंस"
+  "openSourceLicensesRow": "ओपन-सोर्स लाइसेंस",
+  "premiumNotYetAvailable": "अभी उपलब्ध नहीं है"
 }

@@ -149,5 +149,6 @@
   "termsOfServiceRow": "Conditions d'utilisation",
   "supportRow": "Assistance",
   "openLinkFailedMessage": "Impossible d'ouvrir le lien. Veuillez réessayer.",
-  "openSourceLicensesRow": "Licences open source"
+  "openSourceLicensesRow": "Licences open source",
+  "premiumNotYetAvailable": "Pas encore disponible"
 }

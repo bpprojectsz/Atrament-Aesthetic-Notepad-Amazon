@@ -149,5 +149,6 @@
   "termsOfServiceRow": "شروط الخدمة",
   "supportRow": "الدعم",
   "openLinkFailedMessage": "تعذر فتح الرابط. حاول مرة أخرى.",
-  "openSourceLicensesRow": "تراخيص المصادر المفتوحة"
+  "openSourceLicensesRow": "تراخيص المصادر المفتوحة",
+  "premiumNotYetAvailable": "غير متاح بعد"
 }

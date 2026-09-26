@@ -422,5 +422,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get openSourceLicensesRow => '开源许可';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => '尚未提供';
 }

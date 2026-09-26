@@ -422,5 +422,5 @@ class AppLocalizationsKo extends AppLocalizations {
   String get openSourceLicensesRow => '오픈 소스 라이선스';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => '아직 사용할 수 없습니다';
 }

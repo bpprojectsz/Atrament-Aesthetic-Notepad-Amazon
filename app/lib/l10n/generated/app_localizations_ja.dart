@@ -422,5 +422,5 @@ class AppLocalizationsJa extends AppLocalizations {
   String get openSourceLicensesRow => 'オープンソースライセンス';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'まだ利用できません';
 }

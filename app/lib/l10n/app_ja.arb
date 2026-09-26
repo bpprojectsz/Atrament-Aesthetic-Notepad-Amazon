@@ -149,5 +149,6 @@
   "termsOfServiceRow": "利用規約",
   "supportRow": "サポート",
   "openLinkFailedMessage": "リンクを開けませんでした。もう一度お試しください。",
-  "openSourceLicensesRow": "オープンソースライセンス"
+  "openSourceLicensesRow": "オープンソースライセンス",
+  "premiumNotYetAvailable": "まだ利用できません"
 }

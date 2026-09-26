@@ -435,5 +435,5 @@ class AppLocalizationsPt extends AppLocalizations {
   String get openSourceLicensesRow => 'Licenças de código aberto';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'Ainda não disponível';
 }

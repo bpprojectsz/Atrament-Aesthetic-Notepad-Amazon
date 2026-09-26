@@ -426,5 +426,5 @@ class AppLocalizationsHe extends AppLocalizations {
   String get openSourceLicensesRow => 'רישיונות קוד פתוח';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'עדיין לא זמין';
 }

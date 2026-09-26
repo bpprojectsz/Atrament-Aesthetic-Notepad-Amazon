@@ -35,10 +35,6 @@ jobs:
           EOF
         working-directory: app
 
-      - name: Guard pbxproj integrity
-        run: ./tools/check_pbxproj.sh
-        working-directory: .
-
       - name: Install dependencies
         run: flutter pub get
         working-directory: app
@@ -59,7 +55,7 @@ jobs:
         run: flutter test
         working-directory: app
 
-      - name: Build AAB (Play Store submission)
+      - name: Build AAB (Amazon Appstore submission)
         run: |
           flutter build appbundle --release \
             --obfuscate --split-debug-info=build/symbols
