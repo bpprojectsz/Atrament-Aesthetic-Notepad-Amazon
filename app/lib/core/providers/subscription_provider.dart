@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:in_app_purchase/in_app_purchase.dart' show ProductDetails;
+import '../../platform/amazon_iap_service.dart';
 
 import '../services/iap_service.dart';
 import '../utils/constants.dart';
 
 /// Owns ad-removal subscription state for the whole app. Wraps
-/// [IapService] so screens never import `in_app_purchase` directly.
+/// [IapService] so screens never touch the Amazon bridge directly.
 class SubscriptionProvider {
   SubscriptionProvider({IapService? iapService})
     : _iap = iapService ?? IapService.instance;
@@ -31,7 +31,7 @@ class SubscriptionProvider {
   /// briefly hiding ads it isn't yet entitled to hide.
   bool get shouldShowAds => status.value != SubscriptionStatus.pro;
 
-  List<ProductDetails> get availableProducts => _iap.products;
+  List<AmazonProductDetails> get availableProducts => _iap.products;
 
   Future<void> init() async {
     if (_initialized) return;

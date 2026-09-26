@@ -1,24 +1,24 @@
-import 'dart:io' show Platform;
-
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/constants.dart';
 import '../utils/error_handler.dart';
 
-/// Owns all engagement gating: review prompt, share-app prompt, ATT
-/// request. Every decision is a pure predicate over counters and
-/// timestamps stored in SharedPreferences. Callers report events
-/// ("note saved", "export completed"); the service decides whether a
-/// prompt is due and fires it once.
+/// Owns engagement gating: the review prompt and the share-app prompt.
+/// Every decision is a pure predicate over counters and timestamps
+/// stored in SharedPreferences. Callers report events ("note saved",
+/// "export completed"); the service decides whether a prompt is due.
 ///
-/// Thresholds (locked in the audit that preceded this file):
+/// Amazon fork differences from the main repo:
+///   - `in_app_review` (Google Play Core) is unavailable on Fire OS.
+///     Replaced with an Amazon Appstore deep link.
+///   - iOS ATT is not applicable. The `app_tracking_transparency`
+///     dependency and `_maybeRequestAtt` helper are removed.
+///
+/// Thresholds:
 ///   - Review: 20 successful note saves AND >= 5 days since install,
-///     30-day cooldown between attempts. OS also caps at 3/365 on iOS.
+///     30-day cooldown between attempts.
 ///   - Share: 10 successful exports, 30-day cooldown.
-///   - ATT: iOS only, fired once per install after the first successful
-///     note save — never on first frame, never before user value.
 class EngagementService {
   EngagementService._internal();
 
@@ -30,7 +30,12 @@ class EngagementService {
   static const Duration _reviewCooldown = Duration(days: 30);
   static const Duration _shareCooldown = Duration(days: 30);
 
-  final InAppReview _review = InAppReview.instance;
+  // Amazon Appstore deep link. Prefers the installed Amazon Shopping app;
+  // the web URL is the fallback for tablets without it.
+  static const String _amazonNativeUrl =
+      'amzn://apps/android?p=com.zdmgold.atrament';
+  static const String _amazonWebUrl =
+      'https://www.amazon.com/gp/mas/dl/android?p=com.zdmgold.atrament';
 
   bool _installDateChecked = false;
 
@@ -71,7 +76,6 @@ class EngagementService {
       final count = (prefs.getInt(AppConstants.prefNoteSaveCount) ?? 0) + 1;
       await prefs.setInt(AppConstants.prefNoteSaveCount, count);
       await _maybePromptReview(prefs, count);
-      await _maybeRequestAtt(prefs);
     } catch (error, stackTrace) {
       ErrorHandler.report(
         error,
@@ -125,15 +129,7 @@ class EngagementService {
       if (sinceLast < _reviewCooldown) return;
     }
 
-    // Open the store listing rather than requestReview(): the native
-    // in-app review API enforces its own invisible quota and can
-    // silently no-op. openStoreListing() always lands somewhere the
-    // user can act. This matches pub.dev guidance.
-    if (await _review.isAvailable()) {
-      await _review.openStoreListing(
-        appStoreId: null,
-      );
-    }
+    await _openAmazonStoreListing();
     await prefs.setInt(
       AppConstants.prefLastReviewPrompt,
       DateTime.now().millisecondsSinceEpoch,
@@ -161,30 +157,30 @@ class EngagementService {
     );
   }
 
-  // -----------------------------------------------------------------
-  // ATT (iOS only).
-  // -----------------------------------------------------------------
-
-  Future<void> _maybeRequestAtt(SharedPreferences prefs) async {
-    if (!Platform.isIOS) return;
-    final already = prefs.getBool(AppConstants.prefAttRequested) ?? false;
-    if (already) return;
-
+  /// Opens the Atrament listing in the Amazon Appstore, preferring the
+  /// installed Amazon Shopping app via the amzn:// deep link and
+  /// falling back to the web URL if no handler is registered.
+  Future<void> _openAmazonStoreListing() async {
     try {
-      final status =
-          await AppTrackingTransparency.trackingAuthorizationStatus;
-      if (status != TrackingStatus.notDetermined) {
-        await prefs.setBool(AppConstants.prefAttRequested, true);
+      final nativeUri = Uri.parse(_amazonNativeUrl);
+      if (await canLaunchUrl(nativeUri)) {
+        await launchUrl(nativeUri, mode: LaunchMode.externalApplication);
         return;
       }
-      await AppTrackingTransparency.requestTrackingAuthorization();
-      await prefs.setBool(AppConstants.prefAttRequested, true);
+    } catch (_) {
+      // Fall through to the web URL.
+    }
+    try {
+      await launchUrl(
+        Uri.parse(_amazonWebUrl),
+        mode: LaunchMode.externalApplication,
+      );
     } catch (error, stackTrace) {
       ErrorHandler.report(
         error,
         stackTrace,
-        message: 'ATT request failed',
-        context: 'engagement_service.maybeRequestAtt',
+        message: 'Failed to open Amazon store listing',
+        context: 'engagement_service.openAmazonStoreListing',
         severity: ErrorSeverity.warning,
       );
     }
@@ -195,9 +191,5 @@ class EngagementService {
   // -----------------------------------------------------------------
 
   /// Called by the "Rate Atrament" row in Settings. Bypasses thresholds.
-  Future<void> openStoreListingForReview() async {
-    if (await _review.isAvailable()) {
-      await _review.openStoreListing(appStoreId: null);
-    }
-  }
+  Future<void> openStoreListingForReview() => _openAmazonStoreListing();
 }

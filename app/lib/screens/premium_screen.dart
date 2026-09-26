@@ -1,10 +1,10 @@
 import 'package:atrament/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:in_app_purchase/in_app_purchase.dart' show ProductDetails;
 
 import '../core/providers/subscription_provider.dart';
 import '../core/services/iap_service.dart';
 import '../core/utils/constants.dart';
+import '../platform/amazon_iap_service.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/loading_indicator.dart';
 
@@ -29,7 +29,7 @@ class PremiumScreen extends StatelessWidget {
     final match =
         products.where((p) => p.id == AppConstants.iapAdFreeProductId);
     if (match.isEmpty) return fallback;
-    final ProductDetails product = match.first;
+    final AmazonProductDetails product = match.first;
     return product.price;
   }
 
@@ -53,6 +53,8 @@ class PremiumScreen extends StatelessWidget {
               subscriptionProvider.status.value == SubscriptionStatus.pro;
           final isProcessing = subscriptionProvider.isProcessingPurchase.value;
           final error = subscriptionProvider.lastErrorMessage.value;
+            final hasProduct =
+                subscriptionProvider.availableProducts.isNotEmpty;
 
           return Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
@@ -91,6 +93,15 @@ class PremiumScreen extends StatelessWidget {
                       fontSize: AppTypography.body.size,
                       fontWeight: FontWeight.w600,
                       color: AppColors.success.resolve(mode),
+                    ),
+                  )
+                else if (!hasProduct)
+                  Text(
+                    l10n.premiumNotYetAvailable,
+                    style: TextStyle(
+                      fontSize: AppTypography.body.size,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textSecondary.resolve(mode),
                     ),
                   )
                 else ...[

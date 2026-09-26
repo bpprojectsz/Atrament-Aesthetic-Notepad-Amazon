@@ -436,4 +436,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get openSourceLicensesRow => 'Licences open source';
+
+  @override
+  String get premiumNotYetAvailable => 'Not yet available';
 }

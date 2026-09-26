@@ -420,4 +420,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get openSourceLicensesRow => 'オープンソースライセンス';
+
+  @override
+  String get premiumNotYetAvailable => 'Not yet available';
 }

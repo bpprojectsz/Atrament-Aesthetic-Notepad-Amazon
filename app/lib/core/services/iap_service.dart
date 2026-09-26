@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:in_app_purchase/in_app_purchase.dart';
-
+import '../../platform/amazon_iap_service.dart';
 import '../utils/constants.dart';
 import '../utils/error_handler.dart';
 
@@ -10,15 +9,14 @@ enum SubscriptionStatus {
   /// Purchase state not yet determined (still querying at startup).
   unknown,
 
-  /// No active ad-removal subscription — banner ads show.
+  /// No active ad-removal entitlement — banner ads show.
   free,
 
-  /// Active ad-removal subscription — banner ads hidden.
+  /// Active ad-removal entitlement — banner ads hidden.
   pro,
 }
 
-/// Result of a purchase or restore attempt, for explicit UI feedback
-/// (Section 15).
+/// Result of a purchase or restore attempt, for explicit UI feedback.
 class PurchaseAttemptResult {
   const PurchaseAttemptResult.success()
     : errorMessage = null,
@@ -34,17 +32,20 @@ class PurchaseAttemptResult {
   bool get succeeded => errorMessage == null && !cancelled;
 }
 
-/// Wraps `in_app_purchase` (StoreKit on iOS, Play Billing on Android) for
-/// the single one-time ad-removal purchase. This is the only file that
-/// imports `in_app_purchase` directly — `subscription_provider.dart`
-/// listens to [statusStream] rather than touching the plugin.
+/// Wraps the Amazon Appstore SDK IAP bridge for the single one-time
+/// ad-removal entitlement. This is the only file that touches
+/// [AmazonIapService]; `subscription_provider.dart` listens to
+/// [statusStream] rather than the platform channel directly.
 class IapService {
   IapService._internal();
 
   static final IapService instance = IapService._internal();
 
-  final InAppPurchase _iap = InAppPurchase.instance;
-  StreamSubscription<List<PurchaseDetails>>? _purchaseSubscription;
+  final AmazonIapService _amazon = AmazonIapService.instance;
+
+  StreamSubscription<List<AmazonProductDetails>>? _productSub;
+  StreamSubscription<AmazonPurchaseEvent>? _purchaseSub;
+  StreamSubscription<List<AmazonPurchaseEvent>>? _restoreSub;
 
   final StreamController<SubscriptionStatus> _statusController =
       StreamController<SubscriptionStatus>.broadcast();
@@ -56,66 +57,47 @@ class IapService {
   SubscriptionStatus _lastKnownStatus = SubscriptionStatus.unknown;
   SubscriptionStatus get lastKnownStatus => _lastKnownStatus;
 
-  List<ProductDetails> _products = const [];
-  List<ProductDetails> get products => _products;
+  List<AmazonProductDetails> _products = const [];
+  List<AmazonProductDetails> get products => _products;
 
   bool _initialized = false;
 
-  /// Initializes the store connection and begins listening for purchase
-  /// updates. Call once from app startup (e.g. `subscription_provider`'s
-  /// constructor). Safe to call multiple times — no-ops after the first.
+  /// Opens the Amazon bridge and starts listening for product, purchase,
+  /// and restore events. Safe to call multiple times.
+  ///
+  /// When the PEM file is absent (before the first Amazon submission),
+  /// getProductData returns an empty product list, `_products` stays
+  /// empty, and the paywall hides the purchase button. Once the PEM is
+  /// dropped in, this same code path returns the SKU and the button
+  /// becomes active — no code change required.
   Future<void> initialize() async {
     if (_initialized) return;
     _initialized = true;
 
     try {
-      final available = await _iap.isAvailable();
-      if (!available) {
-        _emitStatus(SubscriptionStatus.free);
-        return;
-      }
+      await _amazon.initialize();
 
-      _purchaseSubscription = _iap.purchaseStream.listen(
-        _handlePurchaseUpdates,
-        onError: (Object error, StackTrace stackTrace) {
-          ErrorHandler.report(
-            error,
-            stackTrace,
-            message: 'Purchase stream error',
-            context: 'iap_service.purchaseStream',
-            severity: ErrorSeverity.warning,
-          );
-        },
-      );
+      _productSub = _amazon.productEvents.listen((products) {
+        _products = products;
+      });
 
-      await _queryProducts();
-      await restorePurchases();
+      _purchaseSub = _amazon.purchaseEvents.listen(_handlePurchaseEvent);
+
+      _restoreSub = _amazon.restoreEvents.listen(_handleRestoreEvents);
+
+      await _amazon.getProductData(const [AppConstants.iapAdFreeProductId]);
+      await _amazon.getPurchaseUpdates(reset: true);
     } catch (error, stackTrace) {
       ErrorHandler.report(
         error,
         stackTrace,
-        message: 'Failed to initialize in-app purchases',
+        message: 'Failed to initialize Amazon in-app purchases',
         context: 'iap_service.initialize',
         severity: ErrorSeverity.warning,
       );
-      // Degrade gracefully: treat as free tier rather than blocking the app.
+      // Degrade gracefully: treat as free tier rather than blocking.
       _emitStatus(SubscriptionStatus.free);
     }
-  }
-
-  Future<void> _queryProducts() async {
-    const ids = {AppConstants.iapAdFreeProductId};
-    final response = await _iap.queryProductDetails(ids);
-    if (response.error != null) {
-      ErrorHandler.report(
-        response.error!,
-        StackTrace.current,
-        message: 'Product query returned an error',
-        context: 'iap_service.queryProducts',
-        severity: ErrorSeverity.warning,
-      );
-    }
-    _products = response.productDetails;
   }
 
   Future<PurchaseAttemptResult> purchase(String productId) async {
@@ -127,16 +109,9 @@ class IapService {
     }
 
     try {
-      final param = PurchaseParam(productDetails: product);
-      final started = await _iap.buyNonConsumable(purchaseParam: param);
-      if (!started) {
-        return const PurchaseAttemptResult.failure(
-          'Could not start the purchase. Please try again.',
-        );
-      }
-      // Actual success/failure arrives asynchronously via purchaseStream
-      // and is reflected in statusStream; this return value only confirms
-      // the purchase flow was launched.
+      await _amazon.purchase(productId);
+      // Actual success/failure arrives asynchronously through the event
+      // stream; this return only confirms the flow was launched.
       return const PurchaseAttemptResult.success();
     } catch (error, stackTrace) {
       ErrorHandler.report(
@@ -154,7 +129,7 @@ class IapService {
 
   Future<PurchaseAttemptResult> restorePurchases() async {
     try {
-      await _iap.restorePurchases();
+      await _amazon.getPurchaseUpdates(reset: true);
       return const PurchaseAttemptResult.success();
     } catch (error, stackTrace) {
       ErrorHandler.report(
@@ -170,46 +145,31 @@ class IapService {
     }
   }
 
-  Future<void> _handlePurchaseUpdates(
-    List<PurchaseDetails> purchases,
-  ) async {
-    var hasActivePro = false;
-
-    for (final purchase in purchases) {
-      switch (purchase.status) {
-        case PurchaseStatus.pending:
-          break;
-
-        case PurchaseStatus.purchased:
-        case PurchaseStatus.restored:
-          final isKnownProduct =
-              purchase.productID == AppConstants.iapAdFreeProductId;
-          if (isKnownProduct) {
-            hasActivePro = true;
-          }
-          // Android requires explicit acknowledgement or the purchase
-          // auto-refunds within 3 days.
-          if (purchase.pendingCompletePurchase) {
-            await _iap.completePurchase(purchase);
-          }
-          break;
-
-        case PurchaseStatus.error:
-          ErrorHandler.report(
-            purchase.error ?? Exception('Unknown purchase error'),
-            StackTrace.current,
-            message: 'Purchase reported an error status',
-            context: 'iap_service.handlePurchaseUpdates',
-            severity: ErrorSeverity.warning,
-          );
-          break;
-
-        case PurchaseStatus.canceled:
-          break;
-      }
+  Future<void> _handlePurchaseEvent(AmazonPurchaseEvent event) async {
+    // FULFILLED acknowledges the purchase so the Appstore stops replaying
+    // it. ALREADY_PURCHASED means the user already owns the item; we
+    // surface pro without re-notifying fulfillment.
+    if (event.status == 'SUCCESSFUL' && event.receiptId.isNotEmpty) {
+      await _amazon.notifyFulfillment(event.receiptId, fulfilled: true);
+      _emitStatus(SubscriptionStatus.pro);
+      return;
     }
+    if (event.status == 'ALREADY_PURCHASED') {
+      _emitStatus(SubscriptionStatus.pro);
+      return;
+    }
+    // Any other status leaves the user on the free tier.
+    _emitStatus(SubscriptionStatus.free);
+  }
 
-    _emitStatus(hasActivePro ? SubscriptionStatus.pro : SubscriptionStatus.free);
+  Future<void> _handleRestoreEvents(List<AmazonPurchaseEvent> events) async {
+    final hasEntitlement =
+        events.any((e) => e.sku == AppConstants.iapAdFreeProductId);
+    if (hasEntitlement) {
+      _emitStatus(SubscriptionStatus.pro);
+    }
+    // No entitlement found: keep current status rather than forcibly
+    // downgrading. The user may still be in the middle of a purchase.
   }
 
   void _emitStatus(SubscriptionStatus status) {
@@ -218,7 +178,9 @@ class IapService {
   }
 
   void dispose() {
-    _purchaseSubscription?.cancel();
+    _productSub?.cancel();
+    _purchaseSub?.cancel();
+    _restoreSub?.cancel();
     _statusController.close();
   }
 }

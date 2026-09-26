@@ -36,3 +36,10 @@
 -dontwarn com.google.android.play.core.tasks.OnFailureListener
 -dontwarn com.google.android.play.core.tasks.OnSuccessListener
 -dontwarn com.google.android.play.core.tasks.Task
+
+# Amazon Appstore SDK IAP — required keep rules per Amazon's own docs.
+# SDK 3.0.5 removed the built-in ProGuard rules, so they must be added
+# here or R8 strips PurchasingListener at release and IAP fails silently.
+-dontwarn com.amazon.**
+-keep class com.amazon.** {*;}
+-keepattributes *Annotation*

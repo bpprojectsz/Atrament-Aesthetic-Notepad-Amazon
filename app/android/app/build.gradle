@@ -99,4 +99,9 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     // Required by coreLibraryDesugaringEnabled above.
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+    // Amazon Appstore SDK IAP — pinned to 3.0.4 (see project notes).
+    // 3.0.5 through 3.0.9 throw "Resource already registered" inside
+    // PurchasingService.registerListener on FlutterActivity-based apps.
+    // Amazon staff confirmed 3.0.4 remains supported for production.
+    implementation 'com.amazon.device:amazon-appstore-sdk:3.0.4'
 }

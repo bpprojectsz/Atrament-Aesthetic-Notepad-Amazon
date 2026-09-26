@@ -79,18 +79,18 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: atrament-android-aab
+          name: atrament-amazon-aab
           path: app/build/app/outputs/bundle/release/*.aab
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v4
         with:
-          name: atrament-android-apk
+          name: atrament-amazon-apk
           path: app/build/app/outputs/flutter-apk/*.apk
           if-no-files-found: error
 
       - uses: actions/upload-artifact@v4
         with:
-          name: atrament-debug-symbols
+          name: atrament-amazon-debug-symbols
           path: app/build/symbols/
           if-no-files-found: warn

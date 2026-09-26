@@ -931,6 +931,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open-source licenses'**
   String get openSourceLicensesRow;
+
+  /// No description provided for @premiumNotYetAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet available'**
+  String get premiumNotYetAvailable;
 }
 
 class _AppLocalizationsDelegate

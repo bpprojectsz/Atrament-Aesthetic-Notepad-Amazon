@@ -432,4 +432,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get openSourceLicensesRow => 'Licencias de código abierto';
+
+  @override
+  String get premiumNotYetAvailable => 'Not yet available';
 }
