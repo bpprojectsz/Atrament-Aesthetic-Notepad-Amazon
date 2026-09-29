@@ -34,8 +34,8 @@ class AdMobService {
       // REPLACE: ca-app-pub-xxxxxxxx/xxxxxxxx (AdMob — iOS Banner Unit ID)
       return 'ca-app-pub-3940256099942544/2934735716'; // Google test unit
     }
-    // REPLACE: ca-app-pub-xxxxxxxx/xxxxxxxx (AdMob — Android Banner Unit ID)
-    return 'ca-app-pub-3940256099942544/6300978111'; // Google test unit
+    // Amazon fork: production Android banner unit.
+    return 'ca-app-pub-2731774500195310/1568232456';
   }
 
   String get interstitialAdUnitId {
@@ -43,8 +43,8 @@ class AdMobService {
       // REPLACE: ca-app-pub-xxxxxxxx/xxxxxxxx (AdMob — iOS Interstitial Unit ID)
       return 'ca-app-pub-3940256099942544/4411468910'; // Google test unit
     }
-    // REPLACE: ca-app-pub-xxxxxxxx/xxxxxxxx (AdMob — Android Interstitial Unit ID)
-    return 'ca-app-pub-3940256099942544/1033173712'; // Google test unit
+    // Amazon fork: production Android interstitial unit.
+    return 'ca-app-pub-2731774500195310/2861132826';
   }
 
   /// Loads a single interstitial. Returns `null` on any failure — network,

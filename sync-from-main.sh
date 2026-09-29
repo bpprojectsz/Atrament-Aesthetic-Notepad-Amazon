@@ -30,6 +30,7 @@ PROTECTED=(
   "app/lib/core/providers/subscription_provider.dart"
   "app/lib/screens/premium_screen.dart"
   "app/lib/core/services/engagement_service.dart"
+  "app/lib/platform/admob_service.dart"
   ".github/workflows/build_and_deploy.yml"
 )
 

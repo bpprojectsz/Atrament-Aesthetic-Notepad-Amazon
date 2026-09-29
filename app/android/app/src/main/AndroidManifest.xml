@@ -92,14 +92,11 @@
 
         <!--
           AdMob application ID (Section 1a).
-          REPLACE: ca-app-pub-xxxxxxxx~xxxxxxxx with your real AdMob
-          Android app entry before submission. The value below is
-          Google's official test application ID, safe for development
-          builds only.
+          Amazon fork: production AdMob Android app entry.
         -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-2731774500195310~8990503461" />
 
     </application>
 </manifest>
