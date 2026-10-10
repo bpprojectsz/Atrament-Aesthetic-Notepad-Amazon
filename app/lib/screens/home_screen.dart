@@ -23,7 +23,6 @@ import '../core/utils/route_observer.dart';
 import '../platform/interstitial_service.dart';
 import '../platform/share_service.dart';
 import '../widgets/app_scaffold.dart';
-import '../widgets/banner_ad_widget.dart';
 import '../widgets/chips_row.dart';
 import '../widgets/confirmation_dialog.dart';
 import '../widgets/cover_color_picker.dart';
@@ -210,15 +209,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
         onPressed: _createNote,
         tooltip: l10n.newNoteTitle,
         child: const Icon(Icons.add),
-      ),
-      bottomAdSlot: ListenableBuilder(
-        listenable: widget.subscriptionProvider.status,
-        builder: (context, _) {
-          if (!widget.subscriptionProvider.shouldShowAds) {
-            return const SizedBox.shrink();
-          }
-          return BannerAdWidget(subscriptionProvider: widget.subscriptionProvider);
-        },
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
