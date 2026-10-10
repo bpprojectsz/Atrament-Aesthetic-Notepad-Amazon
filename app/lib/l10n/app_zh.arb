@@ -150,5 +150,6 @@
   "supportRow": "支持",
   "openLinkFailedMessage": "无法打开链接。请重试。",
   "openSourceLicensesRow": "开源许可",
-  "premiumNotYetAvailable": "尚未提供"
+  "premiumNotYetAvailable": "尚未提供",
+  "privacyOptionsRow": "隐私选项"
 }

@@ -150,5 +150,6 @@
   "supportRow": "תמיכה",
   "openLinkFailedMessage": "לא ניתן לפתוח את הקישור. נסה שוב.",
   "openSourceLicensesRow": "רישיונות קוד פתוח",
-  "premiumNotYetAvailable": "עדיין לא זמין"
+  "premiumNotYetAvailable": "עדיין לא זמין",
+  "privacyOptionsRow": "אפשרויות פרטיות"
 }

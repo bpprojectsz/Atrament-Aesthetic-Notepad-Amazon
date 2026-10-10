@@ -423,4 +423,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get premiumNotYetAvailable => '尚未提供';
+
+  @override
+  String get privacyOptionsRow => '隐私选项';
 }

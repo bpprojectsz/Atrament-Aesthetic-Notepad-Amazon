@@ -150,5 +150,6 @@
   "supportRow": "الدعم",
   "openLinkFailedMessage": "تعذر فتح الرابط. حاول مرة أخرى.",
   "openSourceLicensesRow": "تراخيص المصادر المفتوحة",
-  "premiumNotYetAvailable": "غير متاح بعد"
+  "premiumNotYetAvailable": "غير متاح بعد",
+  "privacyOptionsRow": "خيارات الخصوصية"
 }

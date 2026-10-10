@@ -439,4 +439,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get premiumNotYetAvailable => 'Pas encore disponible';
+
+  @override
+  String get privacyOptionsRow => 'Options de confidentialité';
 }

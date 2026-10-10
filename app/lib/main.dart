@@ -15,6 +15,7 @@ import 'core/utils/constants.dart';
 import 'core/utils/error_handler.dart';
 import 'core/utils/route_observer.dart';
 import 'platform/admob_service.dart';
+import 'platform/consent_service.dart';
 import 'platform/debug_log_service.dart';
 import 'platform/notification_service.dart';
 import 'screens/home_screen.dart';
@@ -50,14 +51,33 @@ Future<void> main() async {
   // is unchanged after a test.
   ErrorWidget.builder = _buildErrorWidget;
 
-  // Fire-and-forget platform SDK initialization. Both services degrade
-  // gracefully on failure (Sections 7 and 14), so the app proceeds to
-  // runApp regardless of outcome.
-  unawaited(AdMobService.instance.initialize());
+  // Consent runs first, then ad initialization is gated on its result.
+  // Notification and engagement services are independent of consent.
+  unawaited(_initializeConsentThenAds());
   unawaited(NotificationService.instance.initialize());
   unawaited(EngagementService.instance.ensureInstallDate());
 
   runApp(const AtramentApp());
+}
+
+/// Runs the Google UMP consent flow, then initializes the AdMob SDK
+/// only if consent allows it. Also installs a listener so that a
+/// consent decision made later in the session (for example, the user
+/// answers the form on first launch) triggers ad initialization
+/// without waiting for the next cold start.
+Future<void> _initializeConsentThenAds() async {
+  await ConsentService.instance.initialize();
+
+  if (ConsentService.instance.canRequestAds.value) {
+    await AdMobService.instance.initialize();
+  }
+
+  ConsentService.instance.canRequestAds.addListener(() {
+    if (ConsentService.instance.canRequestAds.value &&
+        !AdMobService.instance.isAvailable) {
+      unawaited(AdMobService.instance.initialize());
+    }
+  });
 }
 
 /// Fallback UI for any framework error, installed via [ErrorWidget.builder]

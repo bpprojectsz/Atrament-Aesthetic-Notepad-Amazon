@@ -937,6 +937,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not yet available'**
   String get premiumNotYetAvailable;
+
+  /// No description provided for @privacyOptionsRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Options'**
+  String get privacyOptionsRow;
 }
 
 class _AppLocalizationsDelegate

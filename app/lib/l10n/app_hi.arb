@@ -150,5 +150,6 @@
   "supportRow": "सहायता",
   "openLinkFailedMessage": "लिंक नहीं खोल सका। कृपया पुनः प्रयास करें।",
   "openSourceLicensesRow": "ओपन-सोर्स लाइसेंस",
-  "premiumNotYetAvailable": "अभी उपलब्ध नहीं है"
+  "premiumNotYetAvailable": "अभी उपलब्ध नहीं है",
+  "privacyOptionsRow": "गोपनीयता विकल्प"
 }

@@ -427,4 +427,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get premiumNotYetAvailable => 'עדיין לא זמין';
+
+  @override
+  String get privacyOptionsRow => 'אפשרויות פרטיות';
 }

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../core/utils/error_handler.dart';
+import 'consent_service.dart';
 
 /// Wraps `google_mobile_ads` initialization and banner loading. Every call
 /// site treats failure as a normal, expected outcome — the banner slot
@@ -80,6 +81,13 @@ class AdMobService {
   /// reports false and callers can skip ad requests entirely.
   Future<void> initialize() async {
     if (_initialized) return;
+
+    // Gate on UMP consent. If the consent service has not confirmed
+    // ads are allowed for this session, skip initialization. The
+    // listener installed in main.dart retries once consent flips true.
+    if (!ConsentService.instance.canRequestAds.value) {
+      return;
+    }
 
     try {
       await MobileAds.instance.initialize();

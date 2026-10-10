@@ -440,4 +440,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get premiumNotYetAvailable => 'Noch nicht verfügbar';
+
+  @override
+  String get privacyOptionsRow => 'Datenschutzoptionen';
 }

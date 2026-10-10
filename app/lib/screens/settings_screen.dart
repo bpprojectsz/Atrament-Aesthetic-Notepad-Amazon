@@ -16,6 +16,7 @@ import '../core/services/iap_service.dart';
 import '../core/utils/constants.dart';
 import '../core/utils/error_handler.dart';
 import '../platform/biometric_service.dart';
+import '../platform/consent_service.dart';
 import '../platform/debug_log_service.dart';
 import '../platform/notification_service.dart';
 import '../platform/share_service.dart';
@@ -478,6 +479,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               context: context,
               applicationName: AppConstants.appName,
             ),
+          ),
+          // Shown only when the Google UMP SDK reports a publisher-
+          // rendered privacy options entry point is required. Outside
+          // the EEA/UK/Switzerland, this collapses to nothing.
+          ValueListenableBuilder<bool>(
+            valueListenable: ConsentService.instance.privacyOptionsRequired,
+            builder: (context, required, _) {
+              if (!required) return const SizedBox.shrink();
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.privacy_tip_outlined),
+                title: Text(l10n.privacyOptionsRow),
+                onTap: ConsentService.instance.showPrivacyOptions,
+              );
+            },
           ),
         ],
       ),

@@ -423,4 +423,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get premiumNotYetAvailable => '아직 사용할 수 없습니다';
+
+  @override
+  String get privacyOptionsRow => '개인정보 옵션';
 }

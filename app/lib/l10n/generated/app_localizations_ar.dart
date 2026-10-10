@@ -430,4 +430,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get premiumNotYetAvailable => 'غير متاح بعد';
+
+  @override
+  String get privacyOptionsRow => 'خيارات الخصوصية';
 }

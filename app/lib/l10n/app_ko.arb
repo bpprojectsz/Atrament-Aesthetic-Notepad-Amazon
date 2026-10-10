@@ -150,5 +150,6 @@
   "supportRow": "지원",
   "openLinkFailedMessage": "링크를 열 수 없습니다. 다시 시도해 주세요.",
   "openSourceLicensesRow": "오픈 소스 라이선스",
-  "premiumNotYetAvailable": "아직 사용할 수 없습니다"
+  "premiumNotYetAvailable": "아직 사용할 수 없습니다",
+  "privacyOptionsRow": "개인정보 옵션"
 }

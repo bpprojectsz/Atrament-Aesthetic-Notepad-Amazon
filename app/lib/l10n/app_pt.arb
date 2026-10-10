@@ -150,5 +150,6 @@
   "supportRow": "Suporte",
   "openLinkFailedMessage": "Não foi possível abrir o link. Tente novamente.",
   "openSourceLicensesRow": "Licenças de código aberto",
-  "premiumNotYetAvailable": "Ainda não disponível"
+  "premiumNotYetAvailable": "Ainda não disponível",
+  "privacyOptionsRow": "Opções de privacidade"
 }

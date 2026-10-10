@@ -434,4 +434,7 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get premiumNotYetAvailable => 'अभी उपलब्ध नहीं है';
+
+  @override
+  String get privacyOptionsRow => 'गोपनीयता विकल्प';
 }
