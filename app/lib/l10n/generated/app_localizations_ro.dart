@@ -404,6 +404,9 @@ class AppLocalizationsRo extends AppLocalizations {
       'Ai deja „Elimină reclamele”. Mulțumim!';
 
   @override
+  String get premiumNotYetAvailable => 'Not yet available';
+
+  @override
   String get supportSectionTitle => 'Asistență';
 
   @override

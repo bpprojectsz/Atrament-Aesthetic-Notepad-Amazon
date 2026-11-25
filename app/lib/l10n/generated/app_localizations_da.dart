@@ -402,6 +402,9 @@ class AppLocalizationsDa extends AppLocalizations {
       'Du har allerede “Fjern reklamer”. Tak!';
 
   @override
+  String get premiumNotYetAvailable => 'Ikke tilgængelig endnu';
+
+  @override
   String get supportSectionTitle => 'Support';
 
   @override

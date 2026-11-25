@@ -402,6 +402,9 @@ class AppLocalizationsTr extends AppLocalizations {
       'Zaten “Reklamları kaldır” seçeneğine sahipsiniz. Teşekkürler!';
 
   @override
+  String get premiumNotYetAvailable => 'Not yet available';
+
+  @override
   String get supportSectionTitle => 'Destek';
 
   @override

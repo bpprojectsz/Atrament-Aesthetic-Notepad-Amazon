@@ -382,6 +382,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get premiumAlreadyProMessage => '이미 광고 제거를 이용 중입니다. 감사합니다!';
 
   @override
+  String get premiumNotYetAvailable => '아직 사용할 수 없습니다';
+
+  @override
   String get supportSectionTitle => '지원';
 
   @override

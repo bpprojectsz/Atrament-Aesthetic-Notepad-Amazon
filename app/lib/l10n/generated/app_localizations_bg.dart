@@ -406,6 +406,9 @@ class AppLocalizationsBg extends AppLocalizations {
       'Вече имате „Премахване на рекламите“. Благодарим ви!';
 
   @override
+  String get premiumNotYetAvailable => 'Все още не е налично';
+
+  @override
   String get supportSectionTitle => 'Поддръжка';
 
   @override

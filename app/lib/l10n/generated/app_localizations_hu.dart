@@ -406,6 +406,9 @@ class AppLocalizationsHu extends AppLocalizations {
       'Már megvan a „Hirdetések eltávolítása”. Köszönjük!';
 
   @override
+  String get premiumNotYetAvailable => 'Még nem érhető el';
+
+  @override
   String get supportSectionTitle => 'Támogatás';
 
   @override

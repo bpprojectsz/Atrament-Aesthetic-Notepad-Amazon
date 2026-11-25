@@ -405,6 +405,9 @@ class AppLocalizationsNl extends AppLocalizations {
       'Je hebt “Advertenties verwijderen” al. Bedankt!';
 
   @override
+  String get premiumNotYetAvailable => 'Nog niet beschikbaar';
+
+  @override
   String get supportSectionTitle => 'Ondersteuning';
 
   @override

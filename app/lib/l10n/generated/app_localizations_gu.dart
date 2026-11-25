@@ -403,6 +403,9 @@ class AppLocalizationsGu extends AppLocalizations {
       'તમારી પાસે પહેલેથી જ “જાહેરાતો દૂર કરો” છે. આભાર!';
 
   @override
+  String get premiumNotYetAvailable => 'હજી ઉપલબ્ધ નથી';
+
+  @override
   String get supportSectionTitle => 'સપોર્ટ';
 
   @override

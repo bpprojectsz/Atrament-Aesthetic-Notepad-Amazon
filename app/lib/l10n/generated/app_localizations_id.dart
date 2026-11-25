@@ -404,6 +404,9 @@ class AppLocalizationsId extends AppLocalizations {
       'Anda sudah memiliki “Hapus iklan”. Terima kasih!';
 
   @override
+  String get premiumNotYetAvailable => 'Belum tersedia';
+
+  @override
   String get supportSectionTitle => 'Dukungan';
 
   @override

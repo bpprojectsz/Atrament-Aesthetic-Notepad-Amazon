@@ -403,6 +403,9 @@ class AppLocalizationsUr extends AppLocalizations {
       'آپ کے پاس پہلے سے “اشتہارات ہٹائیں” موجود ہے۔ شکریہ!';
 
   @override
+  String get premiumNotYetAvailable => 'Not yet available';
+
+  @override
   String get supportSectionTitle => 'معاونت';
 
   @override

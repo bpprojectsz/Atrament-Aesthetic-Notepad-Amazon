@@ -392,6 +392,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get premiumAlreadyProMessage => 'כבר יש לך את “הסרת פרסומות”. תודה!';
 
   @override
+  String get premiumNotYetAvailable => 'עדיין לא זמין';
+
+  @override
   String get supportSectionTitle => 'תמיכה';
 
   @override

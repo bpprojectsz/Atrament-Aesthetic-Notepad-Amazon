@@ -403,6 +403,9 @@ class AppLocalizationsHi extends AppLocalizations {
       'आपके पास पहले से “विज्ञापन हटाएं” सुविधा है। धन्यवाद!';
 
   @override
+  String get premiumNotYetAvailable => 'अभी उपलब्ध नहीं है';
+
+  @override
   String get supportSectionTitle => 'सहायता';
 
   @override

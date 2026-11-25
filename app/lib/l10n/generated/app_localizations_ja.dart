@@ -383,6 +383,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get premiumAlreadyProMessage => 'すでに広告削除をご利用中です。ありがとうございます！';
 
   @override
+  String get premiumNotYetAvailable => 'まだ利用できません';
+
+  @override
   String get supportSectionTitle => 'サポート';
 
   @override

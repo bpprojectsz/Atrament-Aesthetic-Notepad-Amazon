@@ -405,6 +405,9 @@ class AppLocalizationsBn extends AppLocalizations {
       'আপনার কাছে ইতিমধ্যেই “বিজ্ঞাপন সরান” আছে। ধন্যবাদ!';
 
   @override
+  String get premiumNotYetAvailable => 'এখনও উপলব্ধ নয়';
+
+  @override
   String get supportSectionTitle => 'সহায়তা';
 
   @override

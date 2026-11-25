@@ -405,6 +405,9 @@ class AppLocalizationsCa extends AppLocalizations {
       'Ja tens «Elimina els anuncis». Gràcies!';
 
   @override
+  String get premiumNotYetAvailable => 'Encara no disponible';
+
+  @override
   String get supportSectionTitle => 'Assistència';
 
   @override

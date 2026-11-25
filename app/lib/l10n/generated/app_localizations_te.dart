@@ -406,6 +406,9 @@ class AppLocalizationsTe extends AppLocalizations {
       'మీ దగ్గర ఇప్పటికే “ప్రకటనలను తీసివేయండి” ఉంది. ధన్యవాదాలు!';
 
   @override
+  String get premiumNotYetAvailable => 'Not yet available';
+
+  @override
   String get supportSectionTitle => 'మద్దతు';
 
   @override

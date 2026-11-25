@@ -408,6 +408,9 @@ class AppLocalizationsEl extends AppLocalizations {
       'Έχετε ήδη την επιλογή «Κατάργηση διαφημίσεων». Ευχαριστούμε!';
 
   @override
+  String get premiumNotYetAvailable => 'Δεν είναι ακόμη διαθέσιμο';
+
+  @override
   String get supportSectionTitle => 'Υποστήριξη';
 
   @override

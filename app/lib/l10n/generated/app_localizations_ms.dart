@@ -403,6 +403,9 @@ class AppLocalizationsMs extends AppLocalizations {
       'Anda sudah mempunyai “Alih keluar iklan”. Terima kasih!';
 
   @override
+  String get premiumNotYetAvailable => 'Belum tersedia';
+
+  @override
   String get supportSectionTitle => 'Sokongan';
 
   @override

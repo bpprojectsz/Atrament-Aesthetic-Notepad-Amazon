@@ -408,6 +408,9 @@ class AppLocalizationsSw extends AppLocalizations {
       'Tayari una “Ondoa matangazo”. Asante!';
 
   @override
+  String get premiumNotYetAvailable => 'Not yet available';
+
+  @override
   String get supportSectionTitle => 'Msaada';
 
   @override

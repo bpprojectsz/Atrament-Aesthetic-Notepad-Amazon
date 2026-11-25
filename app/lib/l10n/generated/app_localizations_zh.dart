@@ -377,6 +377,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumAlreadyProMessage => '你已拥有移除广告功能，谢谢！';
 
   @override
+  String get premiumNotYetAvailable => 'Not yet available';
+
+  @override
   String get supportSectionTitle => '支持';
 
   @override

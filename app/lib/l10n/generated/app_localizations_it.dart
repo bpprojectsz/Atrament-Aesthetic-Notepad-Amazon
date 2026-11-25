@@ -405,6 +405,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Hai già “Rimuovi pubblicità”. Grazie!';
 
   @override
+  String get premiumNotYetAvailable => 'Non ancora disponibile';
+
+  @override
   String get supportSectionTitle => 'Assistenza';
 
   @override

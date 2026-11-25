@@ -401,6 +401,9 @@ class AppLocalizationsFa extends AppLocalizations {
       '«حذف تبلیغات» را از قبل دارید. سپاسگزاریم!';
 
   @override
+  String get premiumNotYetAvailable => 'هنوز در دسترس نیست';
+
+  @override
   String get supportSectionTitle => 'پشتیبانی';
 
   @override

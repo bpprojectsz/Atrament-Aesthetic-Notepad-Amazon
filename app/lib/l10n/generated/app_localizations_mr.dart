@@ -403,6 +403,9 @@ class AppLocalizationsMr extends AppLocalizations {
       'तुमच्याकडे आधीच “जाहिराती काढा” आहे. धन्यवाद!';
 
   @override
+  String get premiumNotYetAvailable => 'अजून उपलब्ध नाही';
+
+  @override
   String get supportSectionTitle => 'सहाय्य';
 
   @override

@@ -403,6 +403,9 @@ class AppLocalizationsNb extends AppLocalizations {
       'Du har allerede «Fjern annonser». Takk!';
 
   @override
+  String get premiumNotYetAvailable => 'Ikke tilgjengelig ennå';
+
+  @override
   String get supportSectionTitle => 'Brukerstøtte';
 
   @override

@@ -406,6 +406,9 @@ class AppLocalizationsFil extends AppLocalizations {
       'Mayroon ka na ng “Alisin ang mga ad”. Salamat!';
 
   @override
+  String get premiumNotYetAvailable => 'Hindi pa available';
+
+  @override
   String get supportSectionTitle => 'Suporta';
 
   @override

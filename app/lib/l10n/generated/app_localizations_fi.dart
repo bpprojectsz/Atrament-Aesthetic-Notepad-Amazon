@@ -407,6 +407,9 @@ class AppLocalizationsFi extends AppLocalizations {
       'Sinulla on jo ”Poista mainokset”. Kiitos!';
 
   @override
+  String get premiumNotYetAvailable => 'Ei vielä saatavilla';
+
+  @override
   String get supportSectionTitle => 'Tuki';
 
   @override

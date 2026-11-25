@@ -403,6 +403,9 @@ class AppLocalizationsVi extends AppLocalizations {
       'Bạn đã có “Xóa quảng cáo”. Cảm ơn bạn!';
 
   @override
+  String get premiumNotYetAvailable => 'Not yet available';
+
+  @override
   String get supportSectionTitle => 'Hỗ trợ';
 
   @override

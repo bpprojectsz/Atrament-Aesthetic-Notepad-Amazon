@@ -402,6 +402,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get premiumAlreadyProMessage => 'Odstranění reklam už máte. Děkujeme!';
 
   @override
+  String get premiumNotYetAvailable => 'Zatím není k dispozici';
+
+  @override
   String get supportSectionTitle => 'Podpora';
 
   @override

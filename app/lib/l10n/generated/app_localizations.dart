@@ -912,6 +912,12 @@ abstract class AppLocalizations {
   /// **'You already have Remove Ads. Thank you!'**
   String get premiumAlreadyProMessage;
 
+  /// No description provided for @premiumNotYetAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet available'**
+  String get premiumNotYetAvailable;
+
   /// No description provided for @supportSectionTitle.
   ///
   /// In en, this message translates to:

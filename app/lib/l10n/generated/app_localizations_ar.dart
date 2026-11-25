@@ -398,6 +398,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'لديك بالفعل ميزة إزالة الإعلانات. شكرًا لك!';
 
   @override
+  String get premiumNotYetAvailable => 'غير متاح بعد';
+
+  @override
   String get supportSectionTitle => 'الدعم';
 
   @override
