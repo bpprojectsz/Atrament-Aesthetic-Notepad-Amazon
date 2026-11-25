@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../platform/interstitial_service.dart';
 import '../utils/constants.dart';
 import '../utils/error_handler.dart';
 
@@ -18,39 +16,18 @@ import '../utils/error_handler.dart';
 ///     dependency and `_maybeRequestAtt` helper are removed.
 ///
 /// Thresholds:
-///   - Review: 20 successful note saves on at least 3 distinct days of use
-///     (a day counts when it had one successful save), then no sooner than
-///     60 days after our last attempt. Never on the same save as an
-///     interstitial ad, and never within 10 minutes of one (see
-///     [InterstitialService.claimReviewSlot]). On Amazon the "review" opens
-///     the Appstore listing.
+///   - Review: 20 successful note saves AND >= 5 days since install,
+///     30-day cooldown between attempts.
 ///   - Share: 10 successful exports, 30-day cooldown.
 class EngagementService {
-  EngagementService._internal()
-    : _reviewAvailable = null,
-      _requestReview = null,
-      _now = DateTime.now;
-
-  /// For tests: the store-opening step and the clock can be replaced.
-  @visibleForTesting
-  EngagementService.forTesting({
-    Future<bool> Function()? reviewAvailable,
-    Future<void> Function()? requestReview,
-    DateTime Function()? clock,
-  }) : _reviewAvailable = reviewAvailable,
-       _requestReview = requestReview,
-       _now = clock ?? DateTime.now;
-
-  final Future<bool> Function()? _reviewAvailable;
-  final Future<void> Function()? _requestReview;
-  final DateTime Function() _now;
+  EngagementService._internal();
 
   static final EngagementService instance = EngagementService._internal();
 
   static const int _reviewMinSaves = 20;
   static const int _shareMinExports = 10;
-  static const int _reviewMinDays = 3;
-  static const Duration _reviewCooldown = Duration(days: 60);
+  static const Duration _reviewMinAge = Duration(days: 5);
+  static const Duration _reviewCooldown = Duration(days: 30);
   static const Duration _shareCooldown = Duration(days: 30);
 
   // Amazon Appstore deep link. Prefers the installed Amazon Shopping app;
@@ -61,41 +38,6 @@ class EngagementService {
       'https://www.amazon.com/gp/mas/dl/android?p=com.zdmgold.atrament';
 
   bool _installDateChecked = false;
-
-  /// Pure rule: is the review prompt due? [daysWithSaves] counts distinct
-  /// local days that had a successful save (it only needs to reach 3).
-  /// [lastPromptMs] is our last attempt; a time in the future (the clock
-  /// moved back) does not block for good.
-  @visibleForTesting
-  static bool reviewDue({
-    required int saveCount,
-    required int daysWithSaves,
-    required DateTime now,
-    required int? lastPromptMs,
-  }) {
-    if (saveCount < _reviewMinSaves) return false;
-    if (daysWithSaves < _reviewMinDays) return false;
-    if (lastPromptMs == null || lastPromptMs == 0) return true;
-    final since = now.millisecondsSinceEpoch - lastPromptMs;
-    if (since < 0) return true;
-    return since >= _reviewCooldown.inMilliseconds;
-  }
-
-  /// Adds today to the saved set of days with a successful save. Three
-  /// days are enough for the rule, so the set stops growing at three.
-  /// Returns the number of days now stored.
-  Future<int> _recordDayOfUse(SharedPreferences prefs) async {
-    final days = prefs.getStringList(AppConstants.prefSaveDays) ?? <String>[];
-    if (days.length >= _reviewMinDays) return days.length;
-    final now = _now();
-    final key =
-        '${now.year}-${now.month.toString().padLeft(2, '0')}-'
-        '${now.day.toString().padLeft(2, '0')}';
-    if (days.contains(key)) return days.length;
-    final updated = [...days, key];
-    await prefs.setStringList(AppConstants.prefSaveDays, updated);
-    return updated.length;
-  }
 
   // -----------------------------------------------------------------
   // Install-date stamping — call once at startup.
@@ -133,8 +75,7 @@ class EngagementService {
       final prefs = await SharedPreferences.getInstance();
       final count = (prefs.getInt(AppConstants.prefNoteSaveCount) ?? 0) + 1;
       await prefs.setInt(AppConstants.prefNoteSaveCount, count);
-      final days = await _recordDayOfUse(prefs);
-      await _maybePromptReview(prefs, count, days);
+      await _maybePromptReview(prefs, count);
     } catch (error, stackTrace) {
       ErrorHandler.report(
         error,
@@ -170,33 +111,28 @@ class EngagementService {
   // Predicates and firing.
   // -----------------------------------------------------------------
 
-  Future<void> _maybePromptReview(
-    SharedPreferences prefs,
-    int count,
-    int days,
-  ) async {
-    if (!reviewDue(
-      saveCount: count,
-      daysWithSaves: days,
-      now: _now(),
-      lastPromptMs: prefs.getInt(AppConstants.prefLastReviewPrompt),
-    )) {
-      return;
+  Future<void> _maybePromptReview(SharedPreferences prefs, int count) async {
+    if (count < _reviewMinSaves) return;
+
+    final installMs = prefs.getInt(AppConstants.prefInstallDate) ?? 0;
+    if (installMs == 0) return;
+    final age = DateTime.now().difference(
+      DateTime.fromMillisecondsSinceEpoch(installMs),
+    );
+    if (age < _reviewMinAge) return;
+
+    final lastMs = prefs.getInt(AppConstants.prefLastReviewPrompt) ?? 0;
+    if (lastMs != 0) {
+      final sinceLast = DateTime.now().difference(
+        DateTime.fromMillisecondsSinceEpoch(lastMs),
+      );
+      if (sinceLast < _reviewCooldown) return;
     }
 
-    // Amazon has no in-app review sheet, so the prompt opens the Appstore
-    // listing. We record the attempt so we don't ask again soon.
-    final available = await (_reviewAvailable ?? () async => true)();
-    if (available) {
-      // Not near an interstitial: if an ad is loading or showing, or was
-      // shown in the last 10 minutes, the prompt waits for a later save
-      // (nothing is recorded, so the next qualifying save asks again).
-      if (!await InterstitialService.instance.claimReviewSlot()) return;
-      await (_requestReview ?? _openAmazonStoreListing)();
-    }
+    await _openAmazonStoreListing();
     await prefs.setInt(
       AppConstants.prefLastReviewPrompt,
-      _now().millisecondsSinceEpoch,
+      DateTime.now().millisecondsSinceEpoch,
     );
   }
 
