@@ -344,7 +344,8 @@ jobs:
   # Regenerates lib/l10n/generated from the .arb files with the real generator
   # and commits the result to this branch. Run it after editing translations.
   regen:
-    if: ${{ inputs.task == 'regen' }}
+    # Amazon sync: also runs on a push to the sync branch whose message has [regen].
+    if: ${{ inputs.task == 'regen' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[regen]')) }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
