@@ -57,9 +57,6 @@ dependencies:
   # Formatting / i18n
   intl: ^0.20.3
 
-  # Fonts (Inter, Lora — fetched and cached on first use)
-  google_fonts: ^6.2.1
-
   # Icons
   cupertino_icons: ^1.0.8
   flutter_timezone: ^5.1.0
@@ -94,6 +91,20 @@ flutter:
         - asset: assets/fonts/Merriweather-Bold.ttf
           weight: 700
         - asset: assets/fonts/Merriweather-Italic.ttf
+          style: italic
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-Italic.ttf
+          style: italic
+    - family: Lora
+      fonts:
+        - asset: assets/fonts/Lora-Regular.ttf
+        - asset: assets/fonts/Lora-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Lora-Italic.ttf
           style: italic
 
 # flutter_native_splash configuration (Section 10)

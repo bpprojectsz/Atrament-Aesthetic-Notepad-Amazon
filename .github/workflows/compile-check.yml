@@ -3,6 +3,9 @@ name: Compile Check
 # MANUAL ONLY. Compiles and checks the code; never builds or uploads an APK/AAB,
 # and needs no signing secrets. The "Build and Deploy" workflow is separate.
 on:
+  # Temporary (Amazon sync): runs the check on pushes to the sync branch only.
+  push:
+    branches: [sync-main]
   workflow_dispatch:
     inputs:
       task:
