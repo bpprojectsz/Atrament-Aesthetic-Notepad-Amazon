@@ -6,16 +6,16 @@ import 'package:path_provider/path_provider.dart';
 
 import '../utils/error_handler.dart';
 import '../utils/export_helper.dart';
+import 'image_pdf_builder.dart';
 
 /// Outcome of an export attempt, surfaced by the caller as an explicit
 /// success/error message (Section 15: "every save/delete/share shows
 /// explicit success/error feedback").
 class ExportResult {
-  const ExportResult.success(this.filePath) : errorMessage = null;
-  const ExportResult.failure(this.errorMessage) : filePath = null;
+  const ExportResult.success(this.filePath);
+  const ExportResult.failure() : filePath = null;
 
   final String? filePath;
-  final String? errorMessage;
 
   bool get succeeded => filePath != null;
 }
@@ -26,7 +26,18 @@ class ExportResult {
 /// produces bytes and writes them to disk; it never touches `share_plus`
 /// directly, keeping the core/platform boundary intact (Section 4).
 class ExportService {
-  const ExportService();
+  /// [clock] is only for tests; it stamps the file names.
+  const ExportService({this.clock});
+
+  final DateTime Function()? clock;
+
+  /// `20261015_143007` — always ASCII digits, whatever the app language.
+  String _timestamp() {
+    final t = (clock ?? DateTime.now)();
+    String two(int n) => n.toString().padLeft(2, '0');
+    return '${t.year.toString().padLeft(4, '0')}${two(t.month)}${two(t.day)}'
+        '_${two(t.hour)}${two(t.minute)}${two(t.second)}';
+  }
 
   Future<Directory> _exportDirectory() async {
     final dir = await getTemporaryDirectory();
@@ -44,7 +55,16 @@ class ExportService {
   ) async {
     try {
       final dir = await _exportDirectory();
-      final path = p.join(dir.path, '$fileNameStem.$extension');
+      // Title + timestamp, so two notes with the same (or entirely
+      // non-Latin) title never overwrite each other's file, and a repeat
+      // export in the same second gets a "-2" instead of replacing the first.
+      final base = '${fileNameStem}_${_timestamp()}';
+      var path = p.join(dir.path, '$base.$extension');
+      var counter = 2;
+      while (await File(path).exists()) {
+        path = p.join(dir.path, '$base-$counter.$extension');
+        counter++;
+      }
       final file = File(path);
       await file.writeAsBytes(bytes, flush: true);
       return ExportResult.success(path);
@@ -56,9 +76,7 @@ class ExportService {
         context: 'export_service.writeBytes.$extension',
         severity: ErrorSeverity.warning,
       );
-      return const ExportResult.failure(
-        'Could not create the export file. Please try again.',
-      );
+      return const ExportResult.failure();
     }
   }
 
@@ -69,11 +87,20 @@ class ExportService {
     return _writeBytes(bytes, stem, 'txt');
   }
 
+  /// Handwriting, and text in scripts the standard PDF fonts cannot draw,
+  /// is exported as page images drawn with the phone's own fonts; everything
+  /// else is a normal text PDF (smaller, with selectable text).
+  Future<Uint8List> _buildPdfBytes(ExportableNote note) async {
+    if (!note.needsImageRendering) {
+      return ExportHelper.buildPdfDocument(note).save();
+    }
+    return (await const ImagePdfBuilder().build(note)).bytes;
+  }
+
   /// Exports [note] as a formatted `.pdf` file.
   Future<ExportResult> exportAsPdf(ExportableNote note) async {
     try {
-      final document = ExportHelper.buildPdfDocument(note);
-      final bytes = await document.save();
+      final bytes = await _buildPdfBytes(note);
       final stem = ExportHelper.safeFileNameStem(note.title);
       return await _writeBytes(bytes, stem, 'pdf');
     } catch (error, stackTrace) {
@@ -84,9 +111,7 @@ class ExportService {
         context: 'export_service.exportAsPdf',
         severity: ErrorSeverity.warning,
       );
-      return const ExportResult.failure(
-        'Could not generate the PDF. Please try again.',
-      );
+      return const ExportResult.failure();
     }
   }
 

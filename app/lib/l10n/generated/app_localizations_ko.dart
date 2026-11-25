@@ -155,6 +155,76 @@ class AppLocalizationsKo extends AppLocalizations {
   String get unlockButton => '잠금 해제';
 
   @override
+  String get noteLockTurnedOffMessage =>
+      '이 기기에 화면 잠금이나 생체 인식이 설정되어 있지 않아 노트 잠금을 껐습니다.';
+
+  @override
+  String get biometricEnableReason => '노트 잠금을 켜려면 본인 확인을 해 주세요';
+
+  @override
+  String get biometricDisableReason => '노트 잠금을 끄려면 본인 확인을 해 주세요';
+
+  @override
+  String get biometricShareReason => '이 노트를 공유하거나 내보내려면 잠금을 해제하세요';
+
+  @override
+  String get biometricAuthFailedMessage => '본인 확인에 실패했습니다.';
+
+  @override
+  String get biometricSetupNeededMessage => '먼저 기기 설정에서 화면 잠금 또는 지문을 설정해 주세요.';
+
+  @override
+  String get privacyChoicesTitle => '개인정보 선택';
+
+  @override
+  String get purchaseFailedMessage => '구매를 완료하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get restoreSuccessMessage => '구매가 복원되었습니다.';
+
+  @override
+  String get restoreNothingFoundMessage => '이 계정에서 이전 구매 내역을 찾을 수 없습니다.';
+
+  @override
+  String get restoreFailedMessage => '구매를 복원하지 못했습니다. 연결을 확인하고 다시 시도해 주세요.';
+
+  @override
+  String get reminderScheduleFailedMessage => '알림을 예약하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get storageIssueNotebooksLoad => '일부 노트북을 불러오지 못했습니다. 불러온 항목만 표시합니다.';
+
+  @override
+  String get storageIssueNotebookSave => '이 노트북이 저장되지 않았을 수 있습니다. 다시 시도해 주세요.';
+
+  @override
+  String get storageIssueNotebookChange =>
+      '이 변경 사항이 저장되지 않았을 수 있습니다. 다시 시도해 주세요.';
+
+  @override
+  String get storageIssueNotebookDelete => '노트북을 삭제하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get storageIssueNotebookOrder => '새 순서가 저장되지 않았을 수 있습니다. 다시 시도해 주세요.';
+
+  @override
+  String get storageIssueNotesLoad => '일부 노트를 불러오지 못했습니다. 불러온 항목만 표시합니다.';
+
+  @override
+  String get storageIssueSearch => '검색 결과가 불완전할 수 있습니다.';
+
+  @override
+  String get storageIssueNoteSave =>
+      '이 노트가 저장되지 않았을 수 있습니다. 기기 저장 공간을 확인해 주세요.';
+
+  @override
+  String get storageIssueNoteDelete => '노트를 삭제하지 못했습니다. 다시 시도해 주세요.';
+
+  @override
+  String get purchaseUnavailableMessage =>
+      '지금은 이 구매를 이용할 수 없습니다. 나중에 다시 시도해 주세요.';
+
+  @override
   String get exportTitle => '내보내기';
 
   @override
@@ -167,7 +237,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get paperStyleSectionTitle => '용지 스타일';
 
   @override
-  String get paperStyleLined => '줄무늬';
+  String get paperStyleLined => '줄 노트';
 
   @override
   String get paperStyleDotGrid => '점 격자';
@@ -203,7 +273,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get fontLora => 'Lora';
 
   @override
-  String get themeSectionTitle => '모양';
+  String get themeSectionTitle => '외관';
 
   @override
   String get themeLight => '라이트';
@@ -303,7 +373,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get premiumBody =>
-      'Atrament은 작은 배너 광고와 함께 무료입니다. 광고 제거는 일회성 구매이며 다른 것은 잠금 해제되지 않습니다 — 모든 기능은 이미 당신의 것입니다.';
+      'Atrament는 광고와 함께 무료로 제공됩니다. 광고 제거는 일회성 구매이며 다른 기능이 추가로 열리지는 않습니다 — 모든 기능을 이미 이용하실 수 있습니다.';
 
   @override
   String get premiumRestoreButton => '구매 복원';
@@ -422,8 +492,5 @@ class AppLocalizationsKo extends AppLocalizations {
   String get openSourceLicensesRow => '오픈 소스 라이선스';
 
   @override
-  String get premiumNotYetAvailable => '아직 사용할 수 없습니다';
-
-  @override
-  String get privacyOptionsRow => '개인정보 옵션';
+  String get notificationChannelDescription => '선택적으로 설정하는 매일 성경 구절 알림';
 }

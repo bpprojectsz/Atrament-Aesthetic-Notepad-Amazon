@@ -155,6 +155,77 @@ class AppLocalizationsJa extends AppLocalizations {
   String get unlockButton => 'ロック解除';
 
   @override
+  String get noteLockTurnedOffMessage =>
+      'このデバイスには画面ロックや生体認証が設定されていないため、ノートロックをオフにしました。';
+
+  @override
+  String get biometricEnableReason => 'ノートロックをオンにするには本人確認をしてください';
+
+  @override
+  String get biometricDisableReason => 'ノートロックをオフにするには本人確認をしてください';
+
+  @override
+  String get biometricShareReason => 'このノートを共有またはエクスポートするにはロックを解除してください';
+
+  @override
+  String get biometricAuthFailedMessage => '本人確認ができませんでした。';
+
+  @override
+  String get biometricSetupNeededMessage => '先にデバイスの設定で画面ロックまたは指紋認証を設定してください。';
+
+  @override
+  String get privacyChoicesTitle => 'プライバシー設定';
+
+  @override
+  String get purchaseFailedMessage => '購入を完了できませんでした。もう一度お試しください。';
+
+  @override
+  String get restoreSuccessMessage => '購入を復元しました。';
+
+  @override
+  String get restoreNothingFoundMessage => 'このアカウントで以前の購入は見つかりませんでした。';
+
+  @override
+  String get restoreFailedMessage => '購入を復元できませんでした。接続を確認してもう一度お試しください。';
+
+  @override
+  String get reminderScheduleFailedMessage => 'リマインダーを設定できませんでした。もう一度お試しください。';
+
+  @override
+  String get storageIssueNotebooksLoad =>
+      '一部のノートブックを読み込めませんでした。読み込めたものを表示しています。';
+
+  @override
+  String get storageIssueNotebookSave =>
+      'このノートブックは保存されていない可能性があります。もう一度お試しください。';
+
+  @override
+  String get storageIssueNotebookChange => 'この変更は保存されていない可能性があります。もう一度お試しください。';
+
+  @override
+  String get storageIssueNotebookDelete => 'ノートブックを削除できませんでした。もう一度お試しください。';
+
+  @override
+  String get storageIssueNotebookOrder => '新しい順序は保存されていない可能性があります。もう一度お試しください。';
+
+  @override
+  String get storageIssueNotesLoad => '一部のノートを読み込めませんでした。読み込めたものを表示しています。';
+
+  @override
+  String get storageIssueSearch => '検索結果が不完全な可能性があります。';
+
+  @override
+  String get storageIssueNoteSave =>
+      'このノートは保存されていない可能性があります。端末のストレージを確認してください。';
+
+  @override
+  String get storageIssueNoteDelete => 'ノートを削除できませんでした。もう一度お試しください。';
+
+  @override
+  String get purchaseUnavailableMessage =>
+      'この購入は現在ご利用いただけません。しばらくしてからもう一度お試しください。';
+
+  @override
   String get exportTitle => 'エクスポート';
 
   @override
@@ -212,13 +283,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get themeDark => 'ダーク';
 
   @override
-  String get themeParchment => 'パーチメント';
+  String get themeParchment => '羊皮紙';
 
   @override
   String get themeSystem => 'システム';
 
   @override
-  String get verseSectionTitle => 'デイリーバース表示';
+  String get verseSectionTitle => '今日の聖句の表示';
 
   @override
   String get verseModeWatermark => '透かし';
@@ -236,7 +307,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get notificationsSectionTitle => '通知';
 
   @override
-  String get dailyReminderToggle => 'デイリーバースのリマインダー';
+  String get dailyReminderToggle => '毎日の聖句リマインダー';
 
   @override
   String get reminderTimeLabel => 'リマインダー時刻';
@@ -281,7 +352,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get shareAppSubtitle => '友達に伝える';
 
   @override
-  String get shareAppMessage => 'Atrament を試す — 紙の質感を備えた集中できるノートパッド。';
+  String get shareAppMessage => 'Atrament を試してみてください — 紙の質感を備えた、集中できるノートパッド。';
 
   @override
   String get languageSectionTitle => '言語';
@@ -303,7 +374,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get premiumBody =>
-      'Atrament は小さなバナー広告付きで無料です。広告の削除は一度きりの購入で、他の機能は何もロックされていません — すべての機能はすでにあなたのものです。';
+      'Atrament は広告付きで無料です。広告の削除は一度きりの購入で、他の機能が解除されるわけではありません — すべての機能はすでにあなたのものです。';
 
   @override
   String get premiumRestoreButton => '購入を復元';
@@ -336,7 +407,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get debugLogClearedMessage => 'デバッグログを消去しました。';
 
   @override
-  String get premiumUnlockLabel => '広告を完全に削除';
+  String get premiumUnlockLabel => '広告を永久に削除';
 
   @override
   String get premiumUnlockPriceFallback => '\$14.99';
@@ -422,8 +493,5 @@ class AppLocalizationsJa extends AppLocalizations {
   String get openSourceLicensesRow => 'オープンソースライセンス';
 
   @override
-  String get premiumNotYetAvailable => 'まだ利用できません';
-
-  @override
-  String get privacyOptionsRow => 'プライバシーオプション';
+  String get notificationChannelDescription => '任意で設定できる毎日の聖句リマインダー';
 }
