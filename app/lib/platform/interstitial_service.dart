@@ -5,6 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/services/iap_service.dart';
+import '../core/utils/constants.dart';
 import '../core/utils/error_handler.dart';
 import 'admob_service.dart';
 
@@ -38,6 +39,12 @@ class InterstitialService {
 
   /// An ad and the review sheet never appear within this long of each other.
   static const Duration reviewProximity = Duration(minutes: 10);
+
+  /// Amazon: the review prompt opens the Appstore listing and records its time
+  /// in [AppConstants.prefLastReviewPrompt]. A pending ad waits this long
+  /// after any recorded review prompt, so an ad never tries to show as the
+  /// user is sent to the store (or returns from it).
+  static const Duration reviewPromptHold = Duration(minutes: 7);
 
   static const String prefActionCount = 'interstitial_action_count';
   static const String prefPending = 'interstitial_pending';
@@ -183,6 +190,26 @@ class InterstitialService {
     _loading = null;
   }
 
+  /// True when the review prompt was recorded less than [reviewPromptHold]
+  /// ago. A missing time, an old one, or an unreadable store counts as "not
+  /// recent" (the ad is never blocked for good by a storage problem).
+  Future<bool> _reviewPromptRecent(DateTime now) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final ms = prefs.getInt(AppConstants.prefLastReviewPrompt);
+      return !gapElapsed(now, ms, reviewPromptHold);
+    } catch (error, stackTrace) {
+      ErrorHandler.report(
+        error,
+        stackTrace,
+        message: 'Could not read the last review prompt time',
+        context: 'interstitial_service.reviewPromptRecent',
+        severity: ErrorSeverity.warning,
+      );
+      return false;
+    }
+  }
+
   bool _isAdFree() =>
       IapService.instance.lastKnownStatus == SubscriptionStatus.pro;
 
@@ -211,6 +238,9 @@ class InterstitialService {
 
     _attempting = true;
     try {
+      // The review prompt (store listing) was recorded recently: the ad
+      // stays pending and the next counting action tries again.
+      if (await _reviewPromptRecent(now)) return;
       final shown = await (showAttemptForTesting ?? _showIfReady)();
       if (shown) {
         _pending = false;
@@ -269,6 +299,12 @@ class InterstitialService {
     try {
       final ad = await AdMobService.instance.loadInterstitial();
       if (ad == null) return false;
+      // Loading takes seconds: check again right before showing, in case the
+      // review prompt fired on the same save while this ad was loading.
+      if (await _reviewPromptRecent(_now())) {
+        await ad.dispose();
+        return false;
+      }
       _lastShownMs = _now().millisecondsSinceEpoch;
       await _persist();
       ad.fullScreenContentCallback = FullScreenContentCallback(
