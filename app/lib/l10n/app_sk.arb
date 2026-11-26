@@ -129,6 +129,7 @@
   "premiumBody": "Atrament je zadarmo s reklamami. Odstránenie reklám je jednorazový nákup, ktorý nič ďalšie neodomyká — všetky funkcie už máte.",
   "premiumRestoreButton": "Obnoviť nákupy",
   "premiumAlreadyProMessage": "Odstránenie reklám už máte. Ďakujeme!",
+  "premiumNotYetAvailable": "Zatiaľ nie je k dispozícii",
   "supportSectionTitle": "Podpora",
   "shareDebugLogButton": "Zdieľať ladiaci protokol",
   "shareDebugLogSubtitle": "Ak niečo nefunguje, pošlite technickú správu",

@@ -129,6 +129,7 @@
   "premiumBody": "Atrament ใช้ฟรีโดยมีโฆษณา การนำโฆษณาออกเป็นการซื้อครั้งเดียวที่ไม่ปลดล็อกสิ่งอื่น ฟีเจอร์ทั้งหมดเป็นของคุณอยู่แล้ว",
   "premiumRestoreButton": "กู้คืนการซื้อ",
   "premiumAlreadyProMessage": "คุณมี “นำโฆษณาออก” แล้ว ขอบคุณ",
+  "premiumNotYetAvailable": "ยังไม่พร้อมใช้งาน",
   "supportSectionTitle": "การสนับสนุน",
   "shareDebugLogButton": "แชร์บันทึกการแก้ไขข้อบกพร่อง",
   "shareDebugLogSubtitle": "ส่งรายงานทางเทคนิคหากมีบางอย่างไม่ทำงาน",

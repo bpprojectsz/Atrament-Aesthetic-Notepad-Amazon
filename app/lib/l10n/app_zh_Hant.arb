@@ -129,6 +129,7 @@
   "premiumBody": "Atrament 可免費使用，內含廣告。移除廣告為一次性購買，不會解鎖其他內容——所有功能本來就已屬於你。",
   "premiumRestoreButton": "還原購買項目",
   "premiumAlreadyProMessage": "你已擁有「移除廣告」功能，謝謝！",
+  "premiumNotYetAvailable": "尚未提供",
   "supportSectionTitle": "支援",
   "shareDebugLogButton": "分享偵錯記錄",
   "shareDebugLogSubtitle": "若有功能無法正常運作，可傳送技術報告",

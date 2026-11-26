@@ -129,6 +129,7 @@
   "premiumBody": "Atrament reklamlarla birlikte ücretsizdir. Reklamları kaldırmak, başka hiçbir şeyin kilidini açmayan tek seferlik bir satın alımdır: tüm özellikler zaten sizin.",
   "premiumRestoreButton": "Satın alımları geri yükle",
   "premiumAlreadyProMessage": "Zaten “Reklamları kaldır” seçeneğine sahipsiniz. Teşekkürler!",
+  "premiumNotYetAvailable": "Henüz kullanılamıyor",
   "supportSectionTitle": "Destek",
   "shareDebugLogButton": "Hata ayıklama günlüğünü paylaş",
   "shareDebugLogSubtitle": "Bir şey çalışmıyorsa teknik rapor gönderin",

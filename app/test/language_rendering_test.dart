@@ -160,7 +160,6 @@ void main() {
         SharedPreferences.setMockInitialValues({});
         AppLock.instance = AppLock(biometrics: FakeBiometrics());
         final subscription = SubscriptionProvider();
-        await subscription.init();
         ReminderScheduler.instance = ReminderScheduler(
           gateway: _FakeGateway(),
           loadVerses: () async => [
@@ -204,7 +203,6 @@ void main() {
       testWidgets('Premium fits on a narrow phone', (tester) async {
         SharedPreferences.setMockInitialValues({});
         final subscription = SubscriptionProvider();
-        await subscription.init();
         _phone(tester);
 
         final errors = await _collectErrors(() async {

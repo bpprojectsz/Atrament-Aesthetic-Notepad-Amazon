@@ -70,10 +70,10 @@ void main() {
           reason: 'add new languages here as well as in lib/l10n');
     });
 
-    test('the manifest points at that list', () {
-      final manifest = read('android/app/src/main/AndroidManifest.xml');
-      expect(manifest, contains('android:localeConfig="@xml/locales_config"'));
-    });
+    // Amazon: not applicable. The per-app language list is an Android 13
+    // (API 33) feature; Fire tablets run Fire OS 7/8 (Android 9/11), so the
+    // protected Amazon manifest deliberately has no android:localeConfig.
+    // The in-app language picker works on every version.
 
     test('the notification icon the code names exists and is kept in release', () {
       final code = read('lib/platform/notification_service.dart');

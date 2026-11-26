@@ -129,6 +129,7 @@
   "premiumBody": "Atrament ప్రకటనలతో ఉచితం. ప్రకటనలను తీసివేయడం ఒక్కసారి చేసే కొనుగోలు, ఇది మరేదీ అన్‌లాక్ చేయదు — అన్ని ఫీచర్లు ఇప్పటికే మీవే.",
   "premiumRestoreButton": "కొనుగోళ్లను పునరుద్ధరించండి",
   "premiumAlreadyProMessage": "మీ దగ్గర ఇప్పటికే “ప్రకటనలను తీసివేయండి” ఉంది. ధన్యవాదాలు!",
+  "premiumNotYetAvailable": "ఇంకా అందుబాటులో లేదు",
   "supportSectionTitle": "మద్దతు",
   "shareDebugLogButton": "డీబగ్ లాగ్‌ను షేర్ చేయండి",
   "shareDebugLogSubtitle": "ఏదైనా పని చేయకపోతే సాంకేతిక నివేదికను పంపండి",

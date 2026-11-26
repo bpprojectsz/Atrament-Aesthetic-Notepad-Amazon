@@ -129,6 +129,7 @@
   "premiumBody": "Atrament är gratis med annonser. Att ta bort annonserna är ett engångsköp som inte låser upp något annat – alla funktioner är redan dina.",
   "premiumRestoreButton": "Återställ köp",
   "premiumAlreadyProMessage": "Du har redan ”Ta bort annonser”. Tack!",
+  "premiumNotYetAvailable": "Inte tillgängligt ännu",
   "supportSectionTitle": "Support",
   "shareDebugLogButton": "Dela felsökningslogg",
   "shareDebugLogSubtitle": "Skicka en teknisk rapport om något inte fungerar",

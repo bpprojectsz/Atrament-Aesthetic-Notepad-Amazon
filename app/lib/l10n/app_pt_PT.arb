@@ -129,6 +129,7 @@
   "premiumBody": "O Atrament é gratuito, com anúncios. Removê-los é uma compra única que não desbloqueia mais nada — todas as funcionalidades já são suas.",
   "premiumRestoreButton": "Restaurar compras",
   "premiumAlreadyProMessage": "Já tem “Remover anúncios”. Obrigado!",
+  "premiumNotYetAvailable": "Ainda não disponível",
   "supportSectionTitle": "Suporte",
   "shareDebugLogButton": "Partilhar registo de depuração",
   "shareDebugLogSubtitle": "Envie um relatório técnico se algo não estiver a funcionar",

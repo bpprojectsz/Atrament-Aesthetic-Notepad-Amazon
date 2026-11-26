@@ -129,6 +129,7 @@
   "premiumBody": "Atrament безкоштовний і містить рекламу. Вимкнення реклами — разова покупка, яка нічого більше не відкриває: усі функції вже доступні вам.",
   "premiumRestoreButton": "Відновити покупки",
   "premiumAlreadyProMessage": "Вимкнення реклами вже у вас. Дякуємо!",
+  "premiumNotYetAvailable": "Ще недоступно",
   "supportSectionTitle": "Підтримка",
   "shareDebugLogButton": "Надіслати журнал налагодження",
   "shareDebugLogSubtitle": "Надішліть технічний звіт, якщо щось не працює",

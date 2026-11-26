@@ -129,6 +129,7 @@
   "premiumBody": "Atrament este gratuit, cu reclame. Eliminarea reclamelor este o achiziție unică ce nu deblochează nimic altceva — toate funcțiile sunt deja ale tale.",
   "premiumRestoreButton": "Restaurează achizițiile",
   "premiumAlreadyProMessage": "Ai deja „Elimină reclamele”. Mulțumim!",
+  "premiumNotYetAvailable": "Încă indisponibil",
   "supportSectionTitle": "Asistență",
   "shareDebugLogButton": "Distribuie jurnalul de depanare",
   "shareDebugLogSubtitle": "Trimite un raport tehnic dacă ceva nu funcționează",
