@@ -6,7 +6,6 @@ import 'package:atrament/core/providers/subscription_provider.dart';
 import 'package:atrament/core/providers/theme_provider.dart';
 import 'package:atrament/core/providers/verse_provider.dart';
 import 'package:atrament/core/services/app_lock.dart';
-import 'package:atrament/core/services/iap_service.dart';
 import 'package:atrament/core/services/reminder_scheduler.dart';
 import 'package:atrament/core/utils/app_localization_setup.dart';
 import 'package:atrament/core/utils/locale_utils.dart';
@@ -24,7 +23,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'helpers/controlled_storage.dart';
 import 'helpers/fake_biometrics.dart';
-import 'helpers/fake_store.dart';
 
 /// Draws the main screens in every language on a narrow phone with enlarged
 /// text, and fails on any layout overflow or error. Direction is checked too.
@@ -161,9 +159,7 @@ void main() {
       testWidgets('Settings fits on a narrow phone', (tester) async {
         SharedPreferences.setMockInitialValues({});
         AppLock.instance = AppLock(biometrics: FakeBiometrics());
-        final subscription = SubscriptionProvider(
-          iapService: IapService.forTesting(iap: FakeStore(), isAndroid: false),
-        );
+        final subscription = SubscriptionProvider();
         await subscription.init();
         ReminderScheduler.instance = ReminderScheduler(
           gateway: _FakeGateway(),
@@ -207,9 +203,7 @@ void main() {
 
       testWidgets('Premium fits on a narrow phone', (tester) async {
         SharedPreferences.setMockInitialValues({});
-        final subscription = SubscriptionProvider(
-          iapService: IapService.forTesting(iap: FakeStore(), isAndroid: false),
-        );
+        final subscription = SubscriptionProvider();
         await subscription.init();
         _phone(tester);
 
