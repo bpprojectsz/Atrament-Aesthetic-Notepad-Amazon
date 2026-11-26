@@ -3,9 +3,6 @@ name: Compile Check
 # MANUAL ONLY. Compiles and checks the code; never builds or uploads an APK/AAB,
 # and needs no signing secrets. The "Build and Deploy" workflow is separate.
 on:
-  # Temporary (Amazon sync): runs the check on pushes to the sync branch only.
-  push:
-    branches: [sync-main]
   workflow_dispatch:
     inputs:
       task:
@@ -85,13 +82,6 @@ jobs:
             key=$(grep -nE "\[E\]|Expected:|Actual:|Which:|══╡|Exception|Error:|Some tests failed" -A3 "$RUNNER_TEMP/test.log" | head -n 90 | cut -c1-300 | sed 's/%/%25/g' | awk '{printf "%s%%0A",$0}')
             tail_=$(grep -vE '^[[:space:]]*$' "$RUNNER_TEMP/test.log" | tail -n 45 | cut -c1-300 | sed 's/%/%25/g' | awk '{printf "%s%%0A",$0}')
             echo "::error title=Test failures::$key"
-            fails=$(grep -aE "^[0-9:]+ \+[0-9]+ -[0-9]+: .*\[E\]$" "$RUNNER_TEMP/test.log" | sed -E 's#.*/app/test/##' | cut -c1-165 | sort -u | head -n 70 | sed 's/%/%25/g' | awk '{printf "%s%%0A",$0}')
-            echo "::error title=Failing tests (names)::$fails"
-            for f in $(grep -aE "\[E\]$" "$RUNNER_TEMP/test.log" | sed -E 's#.*/app/test/([A-Za-z_]+\.dart).*#\1#' | sort -u | head -n 6); do
-              ln=$(grep -an "$f.*\[E\]" "$RUNNER_TEMP/test.log" | head -1 | cut -d: -f1)
-              msg=$(sed -n "${ln},$((ln+24))p" "$RUNNER_TEMP/test.log" | cut -c1-230 | sed 's/%/%25/g' | awk '{printf "%s%%0A",$0}')
-              echo "::error title=First failure in $f::$msg"
-            done
             echo "::error title=Test log tail::$tail_"
           fi
           exit $code
@@ -351,8 +341,7 @@ jobs:
   # Regenerates lib/l10n/generated from the .arb files with the real generator
   # and commits the result to this branch. Run it after editing translations.
   regen:
-    # Amazon sync: also runs on a push to the sync branch whose message has [regen].
-    if: ${{ inputs.task == 'regen' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[regen]')) }}
+    if: ${{ inputs.task == 'regen' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
