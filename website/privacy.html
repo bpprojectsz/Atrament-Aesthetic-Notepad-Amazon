@@ -30,14 +30,16 @@
   <main class="legal-page">
     <div class="container">
       <h1>Privacy Policy</h1>
-      <p class="legal-updated">Last updated: 2026-09-25</p>
+      <p class="legal-updated">Last updated: 2026-11-21</p>
 
       <p>
         Atrament is built to work entirely on your device. Your notes, notebooks,
-        and settings are stored locally using SQLite and never leave your phone
-        unless you explicitly export or share them yourself. There is no account,
-        no login, and no Atrament server that stores or has access to your
-        note content.
+        and settings are stored locally using SQLite. Atrament itself never
+        sends them anywhere unless you explicitly export or share them
+        yourself. There is no account, no login, and no Atrament server that
+        stores or has access to your note content. Your phone’s own backup
+        service may keep a copy — see “Backups, note lock and diagnostics”
+        below.
       </p>
 
       <h2>What data is collected</h2>
@@ -55,7 +57,7 @@
             <td>Note content</td>
             <td>Titles, text, handwriting strokes, paper/font choices</td>
             <td>Core app functionality — stored locally only</td>
-            <td>Nobody. Never transmitted anywhere.</td>
+            <td>Nobody. Atrament never transmits it (your device’s own backup may include it — see “Backups, note lock and diagnostics”).</td>
           </tr>
           <tr>
             <td>Purchases</td>
@@ -65,9 +67,22 @@
           </tr>
           <tr>
             <td>Usage data &amp; identifiers (advertising ID)</td>
-            <td>Device advertising identifier, general ad interaction events</td>
-            <td>To serve banner and interstitial ads shown to free-tier users</td>
+            
+            <td>Device advertising identifier, general ad interaction events, as collected by Google’s ads library when ads are requested</td>
+            <td>To serve banner and full-screen ads to free-tier users</td>
             <td>Google AdMob</td>
+          </tr>
+          <tr>
+            <td>Ad consent choice</td>
+            <td>Your answer to Google’s consent form, where one is shown. It is stored on your device by Google’s consent library; Atrament only reads whether ads may be requested.</td>
+            <td>To respect your choice about personalized advertising</td>
+            <td>Google (the consent form and ads library are Google’s)</td>
+          </tr>
+          <tr>
+            <td>Reminder settings</td>
+            <td>Whether the daily verse reminder is on and the time you chose</td>
+            <td>To schedule the reminder on your device</td>
+            <td>Nobody. The reminder is scheduled locally by your device; there is no push server.</td>
           </tr>
           <tr>
             <td>Biometric data</td>
@@ -80,12 +95,45 @@
 
       <h2>Advertising (AdMob)</h2>
       <p>
-        Free-tier users see a small banner ad and an occasional full-screen
-        interstitial ad, served by Google AdMob. AdMob may use the device’s
-        advertising identifier to serve relevant ads. On iOS, this only
-        happens if you grant permission via Apple’s App Tracking
-        Transparency prompt; you can decline without losing any app
-        functionality. Purchasing ad removal stops all ad requests entirely.
+        Free-tier users see a small banner ad on the notebook screen and in
+        Settings, and an occasional full-screen ad after some actions, such as
+        saving, exporting or deleting. A full-screen ad is shown at most once
+        every 9 minutes. Ads are served by Google AdMob. AdMob may use the
+        device’s advertising identifier to serve relevant ads.
+      </p>
+      <p>
+        <strong>Your consent choices.</strong> Where the law requires it (for
+        example in the European Economic Area and the United Kingdom, and in
+        some US states), Google’s consent form is shown so you can choose how
+        your data is used for ads. Where Google says a privacy-choices entry is
+        required, Settings shows a <strong>Privacy choices</strong> row that
+        reopens the form so you can review or change your answer at any time.
+        If you decline, you can still use all of Atrament. You may still see
+        ads, but Google applies its own limits to what is served (for example
+        limited or non-personalized ads) according to your choice.
+      </p>
+      <p>
+        <strong>If the form cannot be shown.</strong> If the consent form
+        cannot be displayed (for example, there is no network), Atrament still
+        asks Google’s consent library for the status it has on record, and
+        Google applies the choice you saved last. If that status cannot be
+        read at all, Atrament requests ads anyway, Google applies its own rules
+        for the consent status it has on record, and Atrament asks again once
+        the next time you return to the app.
+      </p>
+      <p>
+        <strong>iOS.</strong> After you first save a note, iOS may ask whether
+        Atrament may track you across other companies’ apps and websites
+        (Apple’s App Tracking Transparency prompt). You can decline without
+        losing any app functionality; if you decline, Google’s ads library
+        cannot use the iOS advertising identifier. <strong>Android.</strong>
+        Atrament declares the Android advertising ID permission for ads. You
+        can reset or delete your advertising ID in your device’s Settings.
+      </p>
+      <p>
+        <strong>Removing ads.</strong> The ad-removal purchase stops banner and
+        full-screen ads. Atrament may still start Google’s ads library and
+        show the consent message on a device that has purchased ad removal.
       </p>
 
       <h2>In-App Purchases</h2>
@@ -96,11 +144,56 @@
         by Apple or Google.
       </p>
 
+      <h2>Reminders, fonts and network use</h2>
+      <p>
+        <strong>Daily verse reminder.</strong> If you turn it on, Atrament asks
+        your device for permission to show notifications and schedules one
+        notification a day, at the time you choose, on your device. Nothing is
+        sent to a server. The verses are included in the app, and no text is
+        downloaded for them.
+      </p>
+      <p>
+        <strong>Fonts.</strong> All fonts Atrament uses are included in the app.
+        Nothing is downloaded for them.
+      </p>
+      <p>
+        <strong>Network use.</strong> Atrament’s own code does not contact any
+        server. The only network traffic comes from Google’s ads library and
+        consent form, and from the Apple or Google purchase service when you
+        buy or restore ad removal. Links you tap (this policy, terms, support,
+        rating Atrament, sharing the app) open in your browser or the store.
+      </p>
+
+      <h2>Backups, note lock and diagnostics</h2>
+      <p>
+        <strong>Backups.</strong> Atrament does not run its own cloud backup.
+        However, your operating system may include the app’s data in its
+        automatic backups (Google’s device backup on Android, iCloud or a
+        computer backup on iOS). Those backups are controlled by your device
+        and account settings and governed by Google’s or Apple’s terms;
+        Atrament cannot see or access them.
+      </p>
+      <p>
+        <strong>Note lock.</strong> The optional note lock uses Face ID,
+        fingerprint, or your device passcode. While it is on, Atrament hides
+        note previews and asks you to unlock before opening, sharing, or
+        exporting a note. It is a screen lock, not encryption: the notes
+        stored on your device are not separately encrypted by Atrament.
+      </p>
+      <p>
+        <strong>Diagnostics.</strong> Atrament keeps a small technical error
+        log on your device. It is never sent automatically. If you choose
+        “Share debug log” in Settings, you decide where it goes; it may
+        contain technical details about an error.
+      </p>
+
       <h2>Data retention and deletion</h2>
       <p>
-        Since all note content lives only on your device, uninstalling
-        Atrament permanently deletes it — there is no cloud copy to
-        separately request deletion of. If you have questions about
+        Atrament keeps no copy of your notes on any server. Uninstalling
+        Atrament deletes the notes stored on your device. If your device
+        backs up app data (see above), a copy may remain in that backup under
+        your Google or Apple account, which you can manage in your device or
+        account settings. If you have questions about
         advertising-related data held by Google AdMob, see Google's own
         privacy policy.
       </p>
@@ -116,8 +209,9 @@
       <p>
         Depending on your location, you may have rights under GDPR, CCPA, or
         similar regulations to access, correct, or delete personal data.
-        Since Atrament stores your note content only on your own device, you
-        already have full, direct control over it at all times. For
+        Since Atrament stores your note content on your own device and has no
+        server copy, you already have direct control over it. Any operating
+        system backup of it is managed in your device or account settings. For
         questions about advertising identifiers or purchase records held by
         Google or Apple, please contact those providers directly.
       </p>

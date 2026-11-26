@@ -158,6 +158,90 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unlockButton => 'Unlock';
 
   @override
+  String get noteLockTurnedOffMessage =>
+      'Note lock was turned off because this device has no screen lock or biometrics set up.';
+
+  @override
+  String get biometricEnableReason =>
+      'Confirm your identity to turn on note lock';
+
+  @override
+  String get biometricDisableReason =>
+      'Confirm your identity to turn off note lock';
+
+  @override
+  String get biometricShareReason => 'Unlock to share or export this note';
+
+  @override
+  String get biometricAuthFailedMessage => 'Unable to verify your identity.';
+
+  @override
+  String get biometricSetupNeededMessage =>
+      'Set up a screen lock or fingerprint in your device settings first.';
+
+  @override
+  String get privacyChoicesTitle => 'Privacy choices';
+
+  @override
+  String get purchaseFailedMessage =>
+      'The purchase could not be completed. Please try again.';
+
+  @override
+  String get restoreSuccessMessage => 'Your purchase was restored.';
+
+  @override
+  String get restoreNothingFoundMessage =>
+      'No previous purchase was found for this account.';
+
+  @override
+  String get restoreFailedMessage =>
+      'Could not restore purchases. Check your connection and try again.';
+
+  @override
+  String get reminderScheduleFailedMessage =>
+      'The reminder could not be scheduled. Please try again.';
+
+  @override
+  String get storageIssueNotebooksLoad =>
+      'Some notebooks could not be loaded. Showing what is available.';
+
+  @override
+  String get storageIssueNotebookSave =>
+      'This notebook may not have been saved. Please try again.';
+
+  @override
+  String get storageIssueNotebookChange =>
+      'This change may not have been saved. Please try again.';
+
+  @override
+  String get storageIssueNotebookDelete =>
+      'The notebook could not be deleted. Please try again.';
+
+  @override
+  String get storageIssueNotebookOrder =>
+      'The new order may not have been saved. Please try again.';
+
+  @override
+  String get storageIssueNotesLoad =>
+      'Some notes could not be loaded. Showing what is available.';
+
+  @override
+  String get storageIssueSearch =>
+      'Search results may be incomplete right now.';
+
+  @override
+  String get storageIssueNoteSave =>
+      'This note may not have been saved. Please check your device storage.';
+
+  @override
+  String get storageIssueNoteDelete =>
+      'The note could not be deleted. Please try again.';
+
+  @override
+  String get purchaseUnavailableMessage =>
+      'This purchase is not available right now. Please try again later.';
+
+  @override
   String get exportTitle => 'Export';
 
   @override
@@ -308,7 +392,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumBody =>
-      'Atrament is free with one small banner ad. Removing it is a one-time purchase that doesn\'t unlock anything else — every feature is already yours.';
+      'Atrament is free with ads. Removing them is a one-time purchase that doesn\'t unlock anything else — every feature is already yours.';
 
   @override
   String get premiumRestoreButton => 'Restore Purchases';
@@ -316,6 +400,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get premiumAlreadyProMessage =>
       'You already have Remove Ads. Thank you!';
+
+  @override
+  String get premiumNotYetAvailable => 'Not yet available';
 
   @override
   String get supportSectionTitle => 'Support';
@@ -390,7 +477,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moveToNotebookEmptyBody =>
-      'No other notebooks yet. Create one to organise this note.';
+      'No other notebooks yet. Create one to organize this note.';
 
   @override
   String get moveToNotebookCreateRow => 'Create new notebook';
@@ -409,7 +496,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String deleteNotebookWithCountBody(int count) {
-    return 'This will delete the notebook and its $count notes. This can\'t be undone.';
+    return 'This will delete the notebook and all its notes (total: $count). This can\'t be undone.';
   }
 
   @override
@@ -432,8 +519,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openSourceLicensesRow => 'Open-source licenses';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
-
-  @override
-  String get privacyOptionsRow => 'Privacy Options';
+  String get notificationChannelDescription =>
+      'Your optional daily Bible verse reminder';
 }

@@ -11,11 +11,14 @@ import '../core/providers/locale_provider.dart';
 import '../core/providers/subscription_provider.dart';
 import '../core/providers/theme_provider.dart';
 import '../core/providers/verse_provider.dart';
+import '../core/services/app_lock.dart';
 import '../core/services/engagement_service.dart';
 import '../core/services/iap_service.dart';
+import '../core/services/reminder_scheduler.dart';
+import '../core/utils/app_theme.dart';
 import '../core/utils/constants.dart';
 import '../core/utils/error_handler.dart';
-import '../platform/biometric_service.dart';
+import '../core/utils/locale_utils.dart';
 import '../platform/consent_service.dart';
 import '../platform/debug_log_service.dart';
 import '../platform/notification_service.dart';
@@ -40,7 +43,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final BiometricService _biometricService = BiometricService();
   final ShareService _shareService = const ShareService();
 
   String _defaultPaperStyleId = 'cream';
@@ -60,7 +62,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _loadPrefs() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final supported = await _biometricService.isSupported();
+      final supported = await AppLock.instance.isSupported();
+      await AppLock.instance.init();
 
       if (!mounted) return;
       setState(() {
@@ -75,8 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           hour: prefs.getInt(AppConstants.prefReminderHour) ?? 8,
           minute: prefs.getInt(AppConstants.prefReminderMinute) ?? 0,
         );
-        _biometricLockEnabled =
-            prefs.getBool(AppConstants.prefBiometricLockEnabled) ?? false;
+        _biometricLockEnabled = AppLock.instance.enabled;
         _biometricSupported = supported;
         _loadingPrefs = false;
       });
@@ -109,59 +111,101 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Future<void> _setNotificationsEnabled(bool enabled) async {
     final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
 
     if (enabled) {
       final granted = await NotificationService.instance.requestPermission();
       if (!granted) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n.notificationPermissionDenied)),
-          );
-        }
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.notificationPermissionDenied)),
+        );
         return;
       }
-      await NotificationService.instance.scheduleDailyReminder(
+      final scheduled = await ReminderScheduler.instance.schedule(
         hour: _reminderTime.hour,
         minute: _reminderTime.minute,
-        verseTitle: l10n.appName,
-        verseBody: l10n.dailyReminderBody,
+        fallbackTitle: l10n.appName,
+        fallbackBody: l10n.dailyReminderBody,
       );
+      if (!scheduled) {
+        // Don't show the toggle as ON when nothing is actually scheduled.
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.reminderScheduleFailedMessage)),
+        );
+        return;
+      }
     } else {
-      await NotificationService.instance.cancelDailyReminder();
+      await ReminderScheduler.instance.cancel();
     }
 
-    setState(() => _notificationsEnabled = enabled);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(AppConstants.prefNotificationsEnabled, enabled);
+    if (!mounted) return;
+    setState(() => _notificationsEnabled = enabled);
   }
 
   Future<void> _pickReminderTime() async {
     final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
     final picked = await showTimePicker(
       context: context,
       initialTime: _reminderTime,
     );
     if (picked == null) return;
 
-    setState(() => _reminderTime = picked);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(AppConstants.prefReminderHour, picked.hour);
     await prefs.setInt(AppConstants.prefReminderMinute, picked.minute);
+    if (!mounted) return;
+    setState(() => _reminderTime = picked);
 
     if (_notificationsEnabled) {
-      await NotificationService.instance.scheduleDailyReminder(
+      final scheduled = await ReminderScheduler.instance.schedule(
         hour: picked.hour,
         minute: picked.minute,
-        verseTitle: l10n.appName,
-        verseBody: l10n.dailyReminderBody,
+        fallbackTitle: l10n.appName,
+        fallbackBody: l10n.dailyReminderBody,
       );
+      if (!scheduled) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.reminderScheduleFailedMessage)),
+        );
+      }
     }
   }
 
+  // Amazon: opens the Appstore listing; the Amazon engagement service
+  // reports no result, so there is nothing to show on failure.
+  Future<void> _rateApp() => EngagementService.instance.openStoreListingForReview();
+
+  // Amazon: the consent service refreshes its own state after the form.
+  Future<void> _openPrivacyChoices() =>
+      ConsentService.instance.showPrivacyOptions();
+
+  /// Turning the lock on or off requires authenticating, so a phone that
+  /// is merely left unlocked can't have its note lock removed.
   Future<void> _setBiometricLockEnabled(bool enabled) async {
-    setState(() => _biometricLockEnabled = enabled);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(AppConstants.prefBiometricLockEnabled, enabled);
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+
+    final outcome = await AppLock.instance.changeEnabled(
+      enabled,
+      reason: enabled ? l10n.biometricEnableReason : l10n.biometricDisableReason,
+    );
+    if (!mounted) return;
+
+    switch (outcome) {
+      case LockChangeOutcome.changed:
+        setState(() => _biometricLockEnabled = AppLock.instance.enabled);
+      case LockChangeOutcome.notSupported:
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.biometricSetupNeededMessage)),
+        );
+      case LockChangeOutcome.denied:
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.biometricAuthFailedMessage)),
+        );
+    }
   }
 
   Future<void> _openUrl(String url) async {
@@ -353,7 +397,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: AppSpacing.lg),
 
           _SectionHeader(l10n.privacySectionTitle),
-          if (_biometricSupported)
+          // Stay visible while the lock is on, even if the device stopped
+          // supporting it, so the user can always turn it off.
+          if (_biometricSupported || _biometricLockEnabled)
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(l10n.biometricLockToggle),
@@ -402,12 +448,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: AppSpacing.lg),
 
           _SectionHeader(l10n.engagementSectionTitle),
+          ValueListenableBuilder<bool>(
+            valueListenable: ConsentService.instance.privacyOptionsRequired,
+            builder: (context, required, _) {
+              if (!required) return const SizedBox.shrink();
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: const Icon(Icons.privacy_tip_outlined),
+                title: Text(l10n.privacyChoicesTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: _openPrivacyChoices,
+              );
+            },
+          ),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.star_outline),
             title: Text(l10n.rateAppTitle),
             subtitle: Text(l10n.rateAppSubtitle),
-            onTap: EngagementService.instance.openStoreListingForReview,
+            onTap: _rateApp,
           ),
           ListTile(
             contentPadding: EdgeInsets.zero,
@@ -425,8 +484,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               final current = localeProvider.preference.value;
               final title = current == null
                   ? l10n.languageSystem
-                  : nativeNameFor(current.languageCode) ??
-                        current.languageCode;
+                  : nativeNameFor(localeTag(current)) ??
+                        localeTag(current);
               final subtitle = current == null
                   ? l10n.languageFollowsSystem
                   : null;
@@ -479,21 +538,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               context: context,
               applicationName: AppConstants.appName,
             ),
-          ),
-          // Shown only when the Google UMP SDK reports a publisher-
-          // rendered privacy options entry point is required. Outside
-          // the EEA/UK/Switzerland, this collapses to nothing.
-          ValueListenableBuilder<bool>(
-            valueListenable: ConsentService.instance.privacyOptionsRequired,
-            builder: (context, required, _) {
-              if (!required) return const SizedBox.shrink();
-              return ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.privacy_tip_outlined),
-                title: Text(l10n.privacyOptionsRow),
-                onTap: ConsentService.instance.showPrivacyOptions,
-              );
-            },
           ),
         ],
       ),
@@ -553,9 +597,7 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mode = Theme.of(context).brightness == Brightness.dark
-        ? AppThemeMode.dark
-        : AppThemeMode.light;
+    final mode = context.appMode;
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: Text(
