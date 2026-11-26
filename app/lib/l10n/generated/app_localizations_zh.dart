@@ -377,7 +377,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get premiumAlreadyProMessage => '你已拥有移除广告功能，谢谢！';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => '尚未提供';
 
   @override
   String get supportSectionTitle => '支持';
@@ -870,6 +870,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get premiumAlreadyProMessage => '你已擁有「移除廣告」功能，謝謝！';
+
+  @override
+  String get premiumNotYetAvailable => '尚未提供';
 
   @override
   String get supportSectionTitle => '支援';

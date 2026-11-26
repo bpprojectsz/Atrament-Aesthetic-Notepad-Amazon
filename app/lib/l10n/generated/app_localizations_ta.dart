@@ -405,7 +405,7 @@ class AppLocalizationsTa extends AppLocalizations {
       'உங்களிடம் ஏற்கெனவே “விளம்பரங்களை அகற்று” உள்ளது. நன்றி!';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'இன்னும் கிடைக்கவில்லை';
 
   @override
   String get supportSectionTitle => 'ஆதரவு';

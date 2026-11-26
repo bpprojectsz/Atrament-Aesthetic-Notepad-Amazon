@@ -392,7 +392,7 @@ class AppLocalizationsTh extends AppLocalizations {
   String get premiumAlreadyProMessage => 'คุณมี “นำโฆษณาออก” แล้ว ขอบคุณ';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'ยังไม่พร้อมใช้งาน';
 
   @override
   String get supportSectionTitle => 'การสนับสนุน';

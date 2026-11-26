@@ -406,7 +406,7 @@ class AppLocalizationsSv extends AppLocalizations {
       'Du har redan ”Ta bort annonser”. Tack!';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'Inte tillgängligt ännu';
 
   @override
   String get supportSectionTitle => 'Support';

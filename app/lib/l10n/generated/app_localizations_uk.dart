@@ -404,7 +404,7 @@ class AppLocalizationsUk extends AppLocalizations {
       'Вимкнення реклами вже у вас. Дякуємо!';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'Ще недоступно';
 
   @override
   String get supportSectionTitle => 'Підтримка';

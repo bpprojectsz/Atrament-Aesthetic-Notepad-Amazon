@@ -402,7 +402,7 @@ class AppLocalizationsSk extends AppLocalizations {
       'Odstránenie reklám už máte. Ďakujeme!';
 
   @override
-  String get premiumNotYetAvailable => 'Not yet available';
+  String get premiumNotYetAvailable => 'Zatiaľ nie je k dispozícii';
 
   @override
   String get supportSectionTitle => 'Podpora';

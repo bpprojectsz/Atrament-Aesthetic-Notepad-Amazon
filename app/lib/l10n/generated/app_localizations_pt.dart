@@ -935,6 +935,9 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get premiumAlreadyProMessage => 'Já tem “Remover anúncios”. Obrigado!';
 
   @override
+  String get premiumNotYetAvailable => 'Ainda não disponível';
+
+  @override
   String get supportSectionTitle => 'Suporte';
 
   @override
